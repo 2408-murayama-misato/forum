@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div class="header-contents">
+    <h1>ログイン</h1>
+</div>
+    <form th:action="@{/login}" th:method="post" th:object="${userForm}">
+        アカウント名
+        <input th:field="*{account}" /><br />
+        パスワード
+        <input th:field="*{password}" type="password" /><br />
+        <input type="submit" value="ログイン" />
+    </form>
+</body>
+</html>
