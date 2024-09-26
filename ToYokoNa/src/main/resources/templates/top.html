@@ -2,13 +2,15 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
-        </style>
         <title>TOP</title>
     </head>
     <body>
         <div class="header-contents">
             <h1>掲示板</h1>
         </div>
+        <a href="/newMessage">
+            <input type="button" value="新規投稿">
+        </a>
         <div class="message-icon" th:each="message : ${messages}">
             <div class="title">
                 件名:<span th:text="${message.title}"/>

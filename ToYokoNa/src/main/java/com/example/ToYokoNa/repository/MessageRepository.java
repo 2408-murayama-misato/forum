@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
-    @Query("SELECT m FROM Message m ORDER BY updatedDate DESC LIMIT :limit")
-    public List<Message> findAllByOrderByUpdateDesc(@Param("limit") int limit);
+    @Query("SELECT m FROM Message m ORDER BY createdDate DESC LIMIT :limit")
+    public List<Message> findAllByOrderByCreateDateDesc(@Param("limit") int limit);
 
 }
