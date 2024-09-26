@@ -17,9 +17,9 @@ public class MessageService {
     MessageRepository messageRepository;
 
     /*
-    投稿取得処理
+    全投稿取得処理
      */
-    public List<UserMessageForm> findMessages() {
+    public List<UserMessageForm> findALLMessages() {
         int limit = 1000;
         List<Message> results = messageRepository.findAllByOrderByCreateDateDesc(limit);
         List<UserMessageForm> messages = setUserMessageForm(results);
@@ -35,13 +35,15 @@ public class MessageService {
             userMessageForm.setTitle(message.getTitle());
             userMessageForm.setUserId(message.getUserId());
             userMessageForm.setUserName(message.getUser().getName());
-            userMessageForm.setUpdatedDate(message.getUpdatedDate());
+            userMessageForm.setCreatedDate(message.getCreatedDate());
             userMessageForm.setCategory(message.getCategory());
             messages.add(userMessageForm);
         }
         return messages;
     }
-
+    /*
+    投稿追加処理
+     */
     public void save(MessageForm messageForm, UserForm loginUser) {
         messageForm.setUserId(loginUser.getId());
         Message message = setMessage(messageForm);
@@ -56,5 +58,32 @@ public class MessageService {
         message.setCategory(messageForm.getCategory());
         message.setUserId(messageForm.getUserId());
         return message;
+    }
+    /*
+    投稿取得処理
+     */
+    public MessageForm findMessage(int id) {
+        Message result = messageRepository.findById(id).orElse(null);
+        MessageForm messageForm = setMessageForm(result);
+        return messageForm;
+    }
+
+    private MessageForm setMessageForm(Message result) {
+        MessageForm messageForm = new MessageForm();
+        messageForm.setId(result.getId());
+        messageForm.setTitle(result.getTitle());
+        messageForm.setText(result.getText());
+        messageForm.setCategory(result.getCategory());
+        messageForm.setUserId(result.getUserId());
+        messageForm.setCreatedDate(result.getCreatedDate());
+        messageForm.setUpdatedDate(result.getUpdatedDate());
+        return messageForm;
+    }
+
+    /*
+    投稿削除処理
+     */
+    public void deleteMessage(int id) {
+        messageRepository.deleteById(id);
     }
 }

@@ -18,7 +18,7 @@ public class UserMessageForm {
 
     private int userId;
 
-    private Date updatedDate;
+    private Date createdDate;
 
     private String userName;
 

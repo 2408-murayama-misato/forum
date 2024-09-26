@@ -10,9 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,20 +32,25 @@ public class MessageController {
     @GetMapping
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
-        List<UserMessageForm> messages = messageService.findMessages();
+        List<UserMessageForm> messages = messageService.findALLMessages();
         mav.addObject("messages", messages);
+        mav.addObject("loginUser", session.getAttribute("loginUser"));
         mav.setViewName("/top");
         return mav;
     }
-
+    /*
+    新規投稿画面遷移
+     */
     @GetMapping("/newMessage")
-    public ModelAndView newMessage( @ModelAttribute("messageForm") MessageForm messageForm) {
+    public ModelAndView newMessage(@ModelAttribute("messageForm") MessageForm messageForm) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("messageForm", messageForm);
         mav.setViewName("/newMessage");
         return mav;
     }
-
+    /*
+    投稿追加処理
+     */
     @PostMapping("/addMessage")
     public ModelAndView addMessage(@ModelAttribute("messageForm")
                                        @Validated MessageForm messageForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -65,9 +68,24 @@ public class MessageController {
             mav.setViewName("redirect:/newMessage");
         } else {
             messageService.save(messageForm, loginUser);
-            mav.setViewName("redirect:/.");
+            mav.setViewName("redirect:/");
         }
         return mav;
     }
 
+    /*
+    投稿削除処理
+     */
+    @DeleteMapping("/deleteMessage/{id}")
+    public ModelAndView deleteMessage(@PathVariable int id) {
+        ModelAndView mav = new ModelAndView();
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        MessageForm message = messageService.findMessage(id);
+        List<String> errorMessages = new ArrayList<>();
+        if (loginUser.getId() == message.getUserId()) {
+            messageService.deleteMessage(id);
+        }
+        mav.setViewName("redirect:/");
+        return mav;
+    }
 }
