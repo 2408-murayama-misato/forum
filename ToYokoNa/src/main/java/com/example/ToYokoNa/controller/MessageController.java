@@ -1,6 +1,6 @@
 package com.example.ToYokoNa.controller;
 
-import com.example.ToYokoNa.controller.form.MessageForm;
+import com.example.ToYokoNa.controller.form.UserMessageForm;
 import com.example.ToYokoNa.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class MessageController {
     @GetMapping
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
-        List<MessageForm> messages = messageService.findMessages();
+        List<UserMessageForm> messages = messageService.findMessages();
         mav.addObject("messages", messages);
         mav.setViewName("/top");
         return mav;

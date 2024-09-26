@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
-        <link th:href="@{static/top.css}" rel="stylesheet">
         </style>
         <title>TOP</title>
     </head>
@@ -10,6 +9,22 @@
         <div class="header-contents">
             <h1>掲示板</h1>
         </div>
-
+        <div class="message-icon" th:each="message : ${messages}">
+            <div class="title">
+                件名:<span th:text="${message.title}"/>
+            </div>
+            <div class="content">
+                本文:<span th:text="${message.text}"/>
+            </div>
+            <div class="category">
+                カテゴリー:<span th:text="${message.category}"/>
+            </div>
+            <div class="update-date">
+                投稿日時:<span th:text="${#dates.format(message.updatedDate, 'yyyy/MM/dd')}"/>
+            </div>
+            <div class="name">
+                投稿者:<span th:text="${message.userName}"/>
+            </div><br>
+        </div>
     </body>
 </html>

@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import com.example.ToYokoNa.repository.entity.User;
 
 @Entity
 @Table(name="messages")
 @Getter
 @Setter
-public class Message {
+public class Message implements Serializable {
 
     @Id
     @Column
@@ -26,14 +30,18 @@ public class Message {
     @Column
     private String category;
 
-    @Column
+    @Column(name="user_id")
     private  int userId;
 
-    @Column(insertable = false, updatable = false)
-    private Date createDate;
+    @Column(name = "created_date",insertable = false, updatable = false)
+    private Date createdDate;
 
-    @Column(insertable = false)
-    private Date updateDate;
+    @Column(name = "updated_date", insertable = false)
+    private Date updatedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",insertable = false, updatable = false)
+    private User user;
 
 
 

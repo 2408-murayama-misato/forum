@@ -1,15 +1,13 @@
 package com.example.ToYokoNa.controller.form;
 
-import com.example.ToYokoNa.repository.entity.User;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-
 @Getter
 @Setter
-public class MessageForm {
+public class UserMessageForm {
+
     private int id;
 
     private String title;
@@ -18,11 +16,10 @@ public class MessageForm {
 
     private String category;
 
-    private  int userId;
-
-    private Date createdDate;
+    private int userId;
 
     private Date updatedDate;
 
-    private UserForm user;
+    private String userName;
+
 }

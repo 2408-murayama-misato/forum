@@ -1,6 +1,7 @@
 package com.example.ToYokoNa.service;
 
 import com.example.ToYokoNa.controller.form.MessageForm;
+import com.example.ToYokoNa.controller.form.UserMessageForm;
 import com.example.ToYokoNa.repository.MessageRepository;
 import com.example.ToYokoNa.repository.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,26 @@ public class MessageService {
     /*
     投稿取得処理
      */
-    public List<MessageForm> findMessages() {
-        List<Message> results = messageRepository.findAll();
-        List<MessageForm> messages = setMessageForm(results);
+    public List<UserMessageForm> findMessages() {
+        int limit = 1000;
+        List<Message> results = messageRepository.findAllByOrderByUpdateDesc(limit);
+        List<UserMessageForm> messages = setUserMessageForm(results);
         return messages;
     }
 
-    private List<MessageForm> setMessageForm(List<Message> results) {
-        List<MessageForm> messages = new ArrayList<>();
+    private List<UserMessageForm> setUserMessageForm(List<Message> results) {
+        List<UserMessageForm> messages = new ArrayList<>();
         for (Message message : results) {
-            MessageForm messageForm = new MessageForm();
-            messageForm.setId(message.getId());
-            messageForm.setText(message.getText());
-            messageForm.setUserId(message.getUserId());
-
+            UserMessageForm userMessageForm = new UserMessageForm();
+            userMessageForm.setId(message.getId());
+            userMessageForm.setText(message.getText());
+            userMessageForm.setTitle(message.getTitle());
+            userMessageForm.setUserId(message.getUserId());
+            userMessageForm.setUserName(message.getUser().getName());
+            userMessageForm.setUpdatedDate(message.getUpdatedDate());
+            userMessageForm.setCategory(message.getCategory());
+            messages.add(userMessageForm);
         }
-
         return messages;
     }
 }
