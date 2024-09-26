@@ -17,31 +17,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(name="account")
     private String account;
 
-    @Column
+    @Column(name="password")
     private String password;
 
-    @Column
+    @Column(name="name")
     private String name;
 
-    @Column(name = "branch_id")
-    private  int branchId;
+    @Column(name="branch_id")
+    private Integer branchId;
 
-    @Column(name = "department_id")
-    private  int departmentId;
+    @Column(name="department_id")
+    private Integer departmentId;
 
-    @Column(name = "is_stopped")
-    private  int isStopped;
+    @Column(name="is_stopped")
+    private Integer isStopped;
 
-    @Column(name = "created_date",insertable = false, updatable = false)
+    @Column(name="created_date")
     private Date createdDate;
 
-    @Column(name = "updated_date", insertable = false)
+    @Column(name="updated_date")
     private Date updatedDate;
 
     @OneToMany(mappedBy = "user")
     private List<Message> message;
+
 
 }
