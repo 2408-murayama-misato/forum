@@ -71,6 +71,7 @@ public class UserController {
      */
     @GetMapping("/userManage")
     public ModelAndView userManage() {
-        return new ModelAndView("userManage");
+
+        return new ModelAndView("/userManage");
     }
 }

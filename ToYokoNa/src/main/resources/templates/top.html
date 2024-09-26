@@ -8,12 +8,11 @@
         <div class="header-contents">
             <h1>掲示板</h1>
         </div>
-        <div th:if="${session.errorMessages != null}">
-            <div class="errorMessages" th:each="errorMessage : ${session.errorMessages} ">
+        <div th:if="${errorMessages != null}">
+            <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
                 <li th:text="${errorMessage}"/>
             </div>
             <br />
-            <>
         </div>
 <!--        ユーザボタン表示フラグについて保留-->
 <!--        <div th:if="${loginUser.getDepartmentId() == 1}">-->

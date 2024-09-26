@@ -36,7 +36,10 @@ public class MessageController {
         ModelAndView mav = new ModelAndView();
         List<UserMessageForm> messages = messageService.findMessages();
         mav.addObject("messages", messages);
+        mav.addObject("errorMessages", session.getAttribute("errorMessages"));
         mav.setViewName("/top");
+        // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
+        session.removeAttribute("errorMessages");
         return mav;
     }
 
