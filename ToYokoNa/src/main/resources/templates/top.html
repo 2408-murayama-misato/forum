@@ -11,9 +11,6 @@
         <a href="/newMessage">
             <input type="button" value="新規投稿">
         </a>
-        <a href="/userLogin">
-            <input type="button" value="ログイン">
-        </a>
         <div class="message-icon" th:each="message : ${messages}">
             <div class="title">
                 件名:<span th:text="${message.title}"/>
