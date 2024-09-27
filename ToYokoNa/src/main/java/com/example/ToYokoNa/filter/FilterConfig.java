@@ -13,6 +13,7 @@ public class FilterConfig {
         bean.setFilter(new ManageAccountFilter());
         //  管理者権限が必要なURL
         bean.addUrlPatterns("/userManage");
+        bean.addUrlPatterns("/userEdit");
         return bean;
     }
 }
