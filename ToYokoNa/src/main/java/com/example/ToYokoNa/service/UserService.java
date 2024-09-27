@@ -94,4 +94,10 @@ public class UserService {
         user.setUpdatedDate(new Date());
         return user;
     }
+
+    public UserForm findUser(int id) {
+        User result = userRepository.findById(id).orElse(null);
+        UserForm user = setUserForm(result);
+        return user;
+    }
 }

@@ -96,4 +96,16 @@ public class UserController {
         userService.saveUser(userData);
         return new ModelAndView("redirect:/userManage");
     }
+
+    /*
+    ユーザー編集機能
+     */
+    @GetMapping("/userEdit/{id}")
+    public ModelAndView userEdit (@PathVariable int id) {
+        ModelAndView mav = new ModelAndView();
+        UserForm user = userService.findUser(id);
+        mav.addObject("user", user);
+        mav.setViewName("/userEdit");
+        return mav;
+    }
 }

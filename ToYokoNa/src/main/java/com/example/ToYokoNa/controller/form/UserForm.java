@@ -16,6 +16,7 @@ public class UserForm {
 
     @CheckBlank(message = "パスワードを入力してください")
     private String password;
+    private String passCheck;
 
     private String name;
     private Integer branchId;
