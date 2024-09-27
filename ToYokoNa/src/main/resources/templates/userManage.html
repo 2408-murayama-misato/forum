@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ユーザ管理画面</title>
 </head>
 <body>
-    <h2>ユーザー管理画面</h2>
+    <h2>ユーザ管理画面</h2>
     <table class="users">
         <tr>
             <th>アカウント名</th>
@@ -57,5 +58,7 @@
             </tr>
         </div>
     </table>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

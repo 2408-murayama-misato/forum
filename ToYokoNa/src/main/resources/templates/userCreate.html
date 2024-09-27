@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ登録</title>
+</head>
+<body>
+    <h2>ユーザー登録</h2>
+    <form method="post" action="/userCreate" th:object="${userForm}">
+        <div class="form-area">
+            <div class="account">
+<!--                アカウント名-->
+<!--                <input type="text" th:field="*{account}" /><br/>-->
+<!--            </div>-->
+<!--            <br />-->
+<!--            <div class="password">-->
+<!--                パスワード-->
+<!--                <input type="password" th:field="*{password}" /><br/>-->
+<!--            </div>-->
+<!--            <br />-->
+<!--            <div class="confirm-password">-->
+<!--                パスワード(確認用)-->
+<!--                <input th:field="*{confirmPassword}" /><br/>-->
+<!--            </div>-->
+<!--            <div class="name">-->
+<!--                氏名-->
+<!--                <input th:field="*{name}" /><br/>-->
+<!--            </div>-->
+<!--            <div class="branch">-->
+<!--                支社-->
+<!--                <input th:field="*{branch}" /><br/>-->
+<!--            </div>-->
+<!--            <div class="department">-->
+<!--                部署-->
+<!--                <input th:field="*{department}" /><br/>-->
+            </div>
+            <input type="submit" value="追加">
+        </div>
+    </form>
+    <br />
+    <div class="footer-contents">
+        <a href="/userManage">
+            戻る
+        </a>
+    </div>
+</body>
+</html>
