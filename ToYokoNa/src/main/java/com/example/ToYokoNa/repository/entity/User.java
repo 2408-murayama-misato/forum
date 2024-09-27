@@ -44,5 +44,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Message> message;
 
+    @ManyToOne
+    @JoinColumn(name = "branch_id", insertable = false, updatable = false)
+    private Branch branch;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id", insertable = false, updatable = false)
+    private Department department;
 }

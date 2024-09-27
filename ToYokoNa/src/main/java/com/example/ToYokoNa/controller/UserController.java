@@ -1,6 +1,7 @@
 package com.example.ToYokoNa.controller;
 
 import com.example.ToYokoNa.controller.form.UserForm;
+import com.example.ToYokoNa.repository.entity.User;
 import com.example.ToYokoNa.service.UserService;
 import com.example.ToYokoNa.utils.CipherUtil;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -67,11 +70,14 @@ public class UserController {
     }
 
     /*
-     * ユーザー管理画面表示
+     * ユーザー管理画面表示(ユーザー全取得)
      */
     @GetMapping("/userManage")
     public ModelAndView userManage() {
-
-        return new ModelAndView("/userManage");
+        ModelAndView mav = new ModelAndView();
+        List<UserForm> users = userService.findAllUser();
+        mav.setViewName("/userManage");
+        mav.addObject("users", users);
+        return mav;
     }
 }
