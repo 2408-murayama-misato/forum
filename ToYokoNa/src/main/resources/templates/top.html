@@ -8,6 +8,11 @@
         <div class="header-contents">
             <h1>掲示板</h1>
         </div>
+        <div th:if="${errorMessages != null}">
+            <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+                <li th:text="${errorMessage}"/><br>
+            </div>
+        </div>
         <a href="/newMessage">
             <input type="button" value="新規投稿">
         </a>
@@ -33,6 +38,15 @@
                         <input type="submit" name="delete-button" value="削除"/>
                     </form>
                 </div>
+            </div><br>
+            <div class="comment">
+            </div>
+            <div class="comment-form">
+                コメント<br>
+                <form method="post" th:action="@{/commentAdd/{messageId}(messageId=${message.id})}" th:object="${commentForm}">
+                    <textarea  th:field="*{text}" rows="5" cols="30"></textarea><br>
+                    <input type="submit" value="投稿"/>
+                </form>
             </div>
         </div>
         <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>

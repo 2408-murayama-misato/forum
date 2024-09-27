@@ -1,5 +1,6 @@
 package com.example.ToYokoNa.controller;
 
+import com.example.ToYokoNa.controller.form.CommentForm;
 import com.example.ToYokoNa.controller.form.MessageForm;
 import com.example.ToYokoNa.controller.form.UserForm;
 import com.example.ToYokoNa.controller.form.UserMessageForm;
@@ -33,6 +34,8 @@ public class MessageController {
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
         List<UserMessageForm> messages = messageService.findALLMessages();
+        CommentForm commentForm = new CommentForm();
+        mav.addObject("commentForm", commentForm);
         mav.addObject("messages", messages);
         mav.addObject("loginUser", session.getAttribute("loginUser"));
         mav.setViewName("/top");
