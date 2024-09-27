@@ -7,16 +7,11 @@ import com.example.ToYokoNa.utils.CipherUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -70,5 +65,35 @@ public class UserController {
         // topにリダイレクト
         mav.setViewName("redirect:/");
         return mav;
+    }
+
+    /*
+     * ユーザー管理画面表示(ユーザー全取得)
+     */
+    @GetMapping("/userManage")
+    public ModelAndView userManage() {
+        ModelAndView mav = new ModelAndView();
+        List<UserForm> users = userService.findAllUser();
+        mav.setViewName("/userManage");
+        mav.addObject("users", users);
+        return mav;
+    }
+
+    /*
+     * ユーザー復活・停止機能
+     */
+    @PutMapping("/{id}")
+    public ModelAndView changeIsStopped(@PathVariable("id") int id) {
+        // 対象のユーザを取得
+        UserForm userData = userService.findById(id);
+        // ユーザのisStoppedの値を変更させる
+        if (userData.getIsStopped() == 1) {
+            userData.setIsStopped(0);
+        } else {
+            userData.setIsStopped(1);
+        }
+        // 値を変更させたらデータを保存させる
+        userService.saveUser(userData);
+        return new ModelAndView("redirect:/userManage");
     }
 }

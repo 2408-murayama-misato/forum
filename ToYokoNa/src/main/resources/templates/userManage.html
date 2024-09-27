@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>ユーザー管理画面</h2>
+    <table class="users">
+        <tr>
+            <th>アカウント名</th>
+            <th>氏名</th>
+            <th>支社名</th>
+            <th>部署名</th>
+            <th>ユーザー停止状態</th>
+        </tr>
+        <div th:each="user : ${users}">
+            <tr>
+                <td>
+                    <p th:text="${user.account}" />
+                </td>
+                <td>
+                    <p th:text="${user.name}" />
+                </td>
+                <td>
+                    <th:block th:switch="${user.branchId}">
+                        <span th:case=1 th:text="本社" />
+                        <span th:case=2 th:text="A支社" />
+                        <span th:case=3 th:text="B支社" />
+                        <span th:case=4 th:text="C支社" />
+                    </th:block>
+                </td>
+                <td>
+                    <th:block th:switch="${user.departmentId}">
+                        <span th:case=1 th:text="総務人事部" />
+                        <span th:case=2 th:text="情報管理部" />
+                        <span th:case=3 th:text="営業部" />
+                        <span th:case=4 th:text="技術部" />
+                    </th:block>
+                </td>
+                <td>
+                    <th:block th:switch="${user.isStopped}">
+                        <span th:case=0 th:text="稼働状態" />
+                        <span th:case=1 th:text="停止状態" />
+                    </th:block>
+                </td>
+                <td>
+                    <a th:href="@{/edit/{id}(id=${user.id})}">
+                        <button class="edit-user" type="button">編集</button>
+                    </a>
+                </td>
+                <td>
+                    <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                        <input type="submit" value="状態変更" name="isStopped-button">
+                    </form>
+                </td>
+            </tr>
+        </div>
+    </table>
+</body>
+</html>

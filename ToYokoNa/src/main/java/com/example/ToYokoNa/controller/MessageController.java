@@ -40,8 +40,11 @@ public class MessageController {
         mav.addObject("commentForm", commentForm);
         mav.addObject("comments", comments);
         mav.addObject("messages", messages);
+        mav.addObject("errorMessages", session.getAttribute("errorMessages"));
         mav.addObject("loginUser", session.getAttribute("loginUser"));
         mav.setViewName("/top");
+        // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
+        session.removeAttribute("errorMessages");
         return mav;
     }
     /*

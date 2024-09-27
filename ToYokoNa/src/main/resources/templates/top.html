@@ -9,6 +9,18 @@
         <div class="header-contents">
             <h1>掲示板</h1>
         </div>
+        <div th:if="${errorMessages != null}">
+            <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
+                <li th:text="${errorMessage}"/>
+            </div>
+            <br />
+        </div>
+<!--        ユーザボタン表示フラグについて保留-->
+<!--        <div th:if="${loginUser.getDepartmentId() == 1}">-->
+<!--            <a href="/userManage">-->
+<!--                ユーザー管理画面-->
+<!--            </a>-->
+<!--        </div>-->
 
         <a href="/newMessage">
             <input type="button" value="新規投稿">
