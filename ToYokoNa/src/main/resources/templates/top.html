@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
+        <link th:href="@{/style.css}" rel="stylesheet">
         <meta charset="UTF-8">
         <title>TOP</title>
     </head>
@@ -20,6 +21,7 @@
 <!--                ユーザー管理画面-->
 <!--            </a>-->
 <!--        </div>-->
+
         <a href="/newMessage">
             <input type="button" value="新規投稿">
         </a>
@@ -27,18 +29,57 @@
             <div class="title">
                 件名:<span th:text="${message.title}"/>
             </div>
-            <div class="content">
-                本文:<span th:text="${message.text}"/>
+            <div class="name">
+                投稿者:<span th:text="${message.userName}"/>
             </div>
             <div class="category">
                 カテゴリー:<span th:text="${message.category}"/>
             </div>
-            <div class="update-date">
-                投稿日時:<span th:text="${#dates.format(message.updatedDate, 'yyyy/MM/dd')}"/>
+            <div class="content">
+                本文:<span th:text="${message.text}"/>
             </div>
-            <div class="name">
-                投稿者:<span th:text="${message.userName}"/>
+            <div class="created-date">
+                投稿日時:<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd')}"/>
+            </div>
+            <div th:if="${message.userId == loginUser.id}">
+                <div class="message-delete">
+                    <form th:method="delete" th:action="@{/deleteMessage/{id}(id=${message.id})}">
+                        <input type="submit" name="delete-button" value="削除"/>
+                    </form>
+                </div>
+            </div><br>
+            <div class="comment" th:each="comment : ${comments}">
+                <div th:if="${comment.messageId == message.id}">
+                    <div class="content">
+                        コメント内容：<span th:text="${comment.text}"/>
+                    </div>
+                    <div class="created-date">
+                        投稿日時:<span th:text="${#dates.format(comment.createdDate, 'yyyy/MM/dd')}"/>
+                    </div>
+                    <div class="name">
+                        投稿者:<span th:text="${comment.userName}"/>
+                    </div><br>
+                    <div class="comment-delete">
+                        <form th:method="delete" th:action="@{/deleteComment/{id}(id=${comment.id})}">
+                            <input type="submit" name="delete-button" value="削除">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-form">
+                コメント<br>
+                <div th:if="${errorMessages != null && message.id == messageId}">
+                    <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+                        <li th:text="${errorMessage}"/><br>
+                    </div>
+                </div>
+                <form method="post" th:action="@{/commentAdd/{messageId}(messageId=${message.id})}" th:object="${commentForm}">
+                    <textarea  th:field="*{text}" rows="5" cols="30"></textarea><br>
+                    <input type="submit" value="投稿"/>
+                </form>
             </div><br>
         </div>
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script th:src="@{/main.js}"></script>
     </body>
 </html>

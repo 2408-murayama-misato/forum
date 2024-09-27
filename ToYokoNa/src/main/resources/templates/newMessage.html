@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+  <link th:href="@{/style.css}" rel="stylesheet">
   <meta charset="UTF-8">
       <meta charset="UTF-8">
       <title>新規投稿</title>
@@ -9,21 +10,22 @@
     <div class="header-contents">
       <h1>新規投稿</h1>
     </div>
-    <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-      <li th:text="${errorMessage}"/><br>
+    <div th:if="${errorMessages != null}">
+      <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+        <li th:text="${errorMessage}"/><br>
+      </div>
     </div>
       <form action="/addMessage" method="post" th:object="${messageForm}">
         <div class="title">件名<br>
-          <textarea type="title" th:field="*{title}" rows="5" cols="30"></textarea>
+          <textarea  th:field="*{title}" rows="5" cols="30"></textarea>
         </div><br>
         <div class="text">本文<br>
-          <textarea type="text" th:field="*{text}" rows="5" cols="30">[[*{text}]]</textarea>
+          <textarea  th:field="*{text}" rows="5" cols="30"></textarea>
         </div><br>
         <div class="category">カテゴリー<br>
-          <textarea type="category" th:field="*{category}" rows="5" cols="30">[[*{category}]]</textarea>
+          <textarea  th:field="*{category}" rows="5" cols="30"></textarea>
         </div><br>
         <input type="submit" value="追加">
       </form>
-
   </body>
 </html>

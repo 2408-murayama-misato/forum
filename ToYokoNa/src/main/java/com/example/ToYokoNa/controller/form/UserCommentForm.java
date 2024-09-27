@@ -4,22 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
 @Getter
 @Setter
-public class UserMessageForm {
-
+public class UserCommentForm {
     private int id;
-
-    private String title;
 
     private String text;
 
-    private String category;
-
     private int userId;
 
-    private Date createdDate;
+    private int messageId;
 
     private String userName;
+
+    private String userAccount;
+
+    private Date createdDate;
 
 }

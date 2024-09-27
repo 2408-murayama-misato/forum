@@ -43,6 +43,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Message> message;
+  
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     @ManyToOne
     @JoinColumn(name = "branch_id", insertable = false, updatable = false)
