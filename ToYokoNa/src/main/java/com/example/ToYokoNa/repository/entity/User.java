@@ -44,5 +44,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Message> message;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
 
 }

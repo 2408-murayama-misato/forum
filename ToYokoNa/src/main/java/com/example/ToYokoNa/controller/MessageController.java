@@ -1,9 +1,7 @@
 package com.example.ToYokoNa.controller;
 
-import com.example.ToYokoNa.controller.form.CommentForm;
-import com.example.ToYokoNa.controller.form.MessageForm;
-import com.example.ToYokoNa.controller.form.UserForm;
-import com.example.ToYokoNa.controller.form.UserMessageForm;
+import com.example.ToYokoNa.controller.form.*;
+import com.example.ToYokoNa.service.CommentService;
 import com.example.ToYokoNa.service.MessageService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,9 @@ public class MessageController {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    CommentService commentService;
+
     /*
     Top画面表示処理
      */
@@ -34,8 +35,10 @@ public class MessageController {
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
         List<UserMessageForm> messages = messageService.findALLMessages();
+        List<UserCommentForm> comments = commentService.findAllComments();
         CommentForm commentForm = new CommentForm();
         mav.addObject("commentForm", commentForm);
+        mav.addObject("comments", comments);
         mav.addObject("messages", messages);
         mav.addObject("loginUser", session.getAttribute("loginUser"));
         mav.setViewName("/top");

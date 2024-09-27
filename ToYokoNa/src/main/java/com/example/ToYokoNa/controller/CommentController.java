@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +27,11 @@ public class CommentController {
 
     @Autowired
     CommentService commentService;
-
+    /*
+    コメントの追加機能
+     */
     @PostMapping("/commentAdd/{messageId}")
-    public ModelAndView commentAdd(@ModelAttribute("commentForm") @Validated CommentForm commentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public ModelAndView commentAdd(@PathVariable int messageId, @ModelAttribute("commentForm") @Validated CommentForm commentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         List<String> errorMessages = new ArrayList<>();
@@ -39,11 +42,23 @@ public class CommentController {
         }
         if (errorMessages.size() > 0){
             redirectAttributes.addFlashAttribute("errorMessages", errorMessages);
+            redirectAttributes.addFlashAttribute("messageId", messageId);
             mav.setViewName("redirect:/");
         } else {
             commentService.saveComment(loginUser, commentForm);
             mav.setViewName("redirect:/");
         }
+        return mav;
+    }
+
+    /*
+    コメントの削除機能
+     */
+    @DeleteMapping("/deleteComment/{id}")
+    public ModelAndView deleteComment (@PathVariable int id) {
+        ModelAndView mav = new ModelAndView();
+        commentService.deleteComment(id);
+        mav.setViewName("redirect:/");
         return mav;
     }
 }
