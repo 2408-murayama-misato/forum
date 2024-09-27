@@ -35,10 +35,10 @@ public class User {
     @Column(name="is_stopped")
     private Integer isStopped;
 
-    @Column(name="created_date")
+    @Column(name="created_date", insertable = false, updatable = false)
     private Date createdDate;
 
-    @Column(name="updated_date")
+    @Column(name="updated_date", insertable = false)
     private Date updatedDate;
 
     @OneToMany(mappedBy = "user")

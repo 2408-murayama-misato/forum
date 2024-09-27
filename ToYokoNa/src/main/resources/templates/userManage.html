@@ -50,8 +50,8 @@
                     </a>
                 </td>
                 <td>
-                    <form th:method="put" th:action="@{/{id}(id=${user.id})}" th:object="${users}">
-                    <input type="submit" value="状態変更">
+                    <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                        <input type="submit" value="状態変更" name="isStopped-button">
                     </form>
                 </td>
             </tr>

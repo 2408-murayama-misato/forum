@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +33,7 @@ public class UserService {
     private UserForm setUserForm(User result) {
         UserForm user = new UserForm();
         user.setId(result.getId());
+        user.setPassword(result.getPassword());
         user.setAccount(result.getAccount());
         user.setName(result.getName());
         user.setBranchId(result.getBranchId());
@@ -63,5 +65,33 @@ public class UserService {
             users.add(user);
         }
         return users;
+    }
+    /*
+     * idを使用してユーザを取得
+     */
+    public UserForm findById(int id) {
+        User result = userRepository.findById(id).orElse(null);
+        UserForm user = setUserForm(result);
+        return user;
+    }
+    /*
+     * ユーザ情報の更新
+     */
+    public void saveUser(UserForm userForm) {
+        User saveUser = setUserEntity(userForm);
+        userRepository.save(saveUser);
+    }
+
+    private User setUserEntity(UserForm userForm) {
+        User user = new User();
+        user.setId(userForm.getId());
+        user.setPassword(userForm.getPassword());
+        user.setAccount(userForm.getAccount());
+        user.setName(userForm.getName());
+        user.setBranchId(userForm.getBranchId());
+        user.setDepartmentId(userForm.getDepartmentId());
+        user.setIsStopped(userForm.getIsStopped());
+        user.setUpdatedDate(new Date());
+        return user;
     }
 }
