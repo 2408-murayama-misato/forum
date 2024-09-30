@@ -32,11 +32,13 @@ public class ManageAccountFilter implements Filter {
             UserForm user = (UserForm)httpSession.getAttribute("loginUser");
             if (user.getDepartmentId() == 1) {
                 chain.doFilter(httpRequest, httpResponse); //処理を続ける(フィルターを抜ける)
+
             }
         }
         List<String> errorMessages = new ArrayList<>();
         errorMessages.add("無効なアクセスです");
         httpSession.setAttribute("errorMessages", errorMessages);
+        httpResponse.sendRedirect("/");
     }
 
     @Override
