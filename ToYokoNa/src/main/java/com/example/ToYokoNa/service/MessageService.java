@@ -9,8 +9,14 @@ import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static org.apache.logging.log4j.util.Strings.isBlank;
+
 @Service
 public class MessageService {
     @Autowired
@@ -19,9 +25,33 @@ public class MessageService {
     /*
     全投稿取得処理
      */
-    public List<UserMessageForm> findALLMessages() {
+    public List<UserMessageForm> findALLMessages(String startDate, String endDate, String category) throws ParseException {
+//       取得件数定数
         int limit = 1000;
-        List<Message> results = messageRepository.findAllByOrderByCreateDateDesc(limit);
+//        絞込日付作成処理
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Message> results = new ArrayList<>();
+        if (isBlank(startDate)) {
+            startDate = "2022-01-01 00:00:00";
+        } else {
+            startDate = startDate + " 00:00:00";
+        }
+        if (isBlank(endDate)) {
+            endDate = sdf.format(new Date());
+        } else {
+            endDate = endDate + " 23:59:59";
+        }
+        Date start = sdf.parse(startDate);
+        Date end = sdf.parse(endDate);
+
+        if (isBlank(category)) {
+//            カテゴリー情報なし投稿取得処理
+             results = messageRepository.findAllByOrderByCreateDateDesc(limit, start, end);
+        } else {
+//            カテゴリー情報あり投稿取得処理
+            results = messageRepository.findAllByWHERECategoryOrderByCreateDateDesc(limit, start, end, category);
+        }
+
         List<UserMessageForm> messages = setUserMessageForm(results);
         return messages;
     }

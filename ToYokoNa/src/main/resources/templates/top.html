@@ -15,16 +15,23 @@
             </div>
             <br />
         </div>
-<!--        ユーザボタン表示フラグについて保留-->
-<!--        <div th:if="${loginUser.getDepartmentId() == 1}">-->
-<!--            <a href="/userManage">-->
-<!--                ユーザー管理画面-->
-<!--            </a>-->
-<!--        </div>-->
-
+　　　 　<!--　ユーザボタン表示フラグについて保留-->
+        <!--                ユーザー管理画面-->
+      <div th:if="${isShowUserManage}">
+            <a href="/userManage">
+                <input type="button" value="ユーザー管理画面">
+            </a>
+      </div>
         <a href="/newMessage">
             <input type="button" value="新規投稿">
         </a>
+        <div class="search">
+            <form action="./">
+                <input type="date" name="startDate" th:value="${startDate}">~<input type="date" name="endDate" th:value="${endDate}">
+                <textarea name="category" id="category">[[${category}]]</textarea>
+                <input type="submit" value="絞込">
+            </form>
+        </div>
         <div class="message-icon" th:each="message : ${messages}">
             <div class="title">
                 件名:<span th:text="${message.title}"/>
@@ -36,7 +43,7 @@
                 カテゴリー:<span th:text="${message.category}"/>
             </div>
             <div class="content">
-                本文:<span th:text="${message.text}"/>
+                本文:<pre><span th:text="${message.text}"/></pre>
             </div>
             <div class="created-date">
                 投稿日時:<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd')}"/>
@@ -44,7 +51,7 @@
             <div th:if="${message.userId == loginUser.id}">
                 <div class="message-delete">
                     <form th:method="delete" th:action="@{/deleteMessage/{id}(id=${message.id})}">
-                        <input type="submit" name="delete-button" value="削除"/>
+                        <input type="submit" name="delete-button" value="投稿削除"/>
                     </form>
                 </div>
             </div><br>
@@ -53,15 +60,15 @@
                     <div class="content">
                         コメント内容：<span th:text="${comment.text}"/>
                     </div>
+                    <div class="name">
+                        投稿者:<span th:text="${comment.userName}"/>
+                    </div>
                     <div class="created-date">
                         投稿日時:<span th:text="${#dates.format(comment.createdDate, 'yyyy/MM/dd')}"/>
                     </div>
-                    <div class="name">
-                        投稿者:<span th:text="${comment.userName}"/>
-                    </div><br>
                     <div class="comment-delete">
                         <form th:method="delete" th:action="@{/deleteComment/{id}(id=${comment.id})}">
-                            <input type="submit" name="delete-button" value="削除">
+                            <input type="submit" name="delete-button" value="コメント削除">
                         </form>
                     </div>
                 </div>

@@ -9,13 +9,14 @@ body {
 
 
 .message-icon {
-	margin-bottom: 5px;
-	padding: 5px;
+	margin-bottom: 10px;
+
 	background-color: white;
 }
 
-.title .name {
-	font-weight: lighter;
-	color: gray;
-	font: small-caption;
+/*.title, .name, .category, .content {
+    border-bottom-color: aqua;
+    border: solid 5px;
+    border-color: #00000040;
 }
+*/
