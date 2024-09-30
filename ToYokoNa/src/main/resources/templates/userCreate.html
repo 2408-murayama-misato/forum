@@ -7,34 +7,51 @@
 </head>
 <body>
     <h2>ユーザー登録</h2>
+    <div th:if="${errorMessages != null}">
+        <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
+            <li th:text="${errorMessage}"/>
+        </div>
+        <br />
+    </div>
     <form method="post" action="/userCreate" th:object="${userForm}">
         <div class="form-area">
             <div class="account">
-<!--                アカウント名-->
-<!--                <input type="text" th:field="*{account}" /><br/>-->
-<!--            </div>-->
-<!--            <br />-->
-<!--            <div class="password">-->
-<!--                パスワード-->
-<!--                <input type="password" th:field="*{password}" /><br/>-->
-<!--            </div>-->
-<!--            <br />-->
-<!--            <div class="confirm-password">-->
-<!--                パスワード(確認用)-->
-<!--                <input th:field="*{confirmPassword}" /><br/>-->
-<!--            </div>-->
-<!--            <div class="name">-->
-<!--                氏名-->
-<!--                <input th:field="*{name}" /><br/>-->
-<!--            </div>-->
-<!--            <div class="branch">-->
-<!--                支社-->
-<!--                <input th:field="*{branch}" /><br/>-->
-<!--            </div>-->
-<!--            <div class="department">-->
-<!--                部署-->
-<!--                <input th:field="*{department}" /><br/>-->
+                アカウント名
+                <input type="text" th:field="*{account}" /><br/>
             </div>
+            <br />
+            <div class="password">
+                パスワード
+                <input type="password" th:field="*{password}" /><br/>
+            </div>
+            <br />
+            <div class="confirm-password">
+                パスワード(確認用)
+                <input type="password" th:field="*{passCheck}" /><br/>
+            </div>
+            <br />
+            <div class="name">
+                氏名
+                <input th:field="*{name}" /><br/>
+            </div>
+            <br />
+            <div class="branch">
+                支社
+                <select th:field="*{branchId}">
+                    <option value="">選択してください</option>
+                    <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}"></option>
+                </select>
+                <br/>
+            </div>
+            <br />
+            <div class="department">
+                部署
+                <select th:field="*{departmentId}">
+                    <option value="">選択してください</option>
+                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                </select>
+            </div>
+            <br />
             <input type="submit" value="追加">
         </div>
     </form>

@@ -14,6 +14,7 @@ public class FilterConfig {
         //  管理者権限が必要なURL
         bean.addUrlPatterns("/userManage");
         bean.addUrlPatterns("/userEdit");
+        bean.addUrlPatterns("/userCreate");
         return bean;
     }
 }
