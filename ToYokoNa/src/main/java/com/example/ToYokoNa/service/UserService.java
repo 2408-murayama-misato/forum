@@ -66,16 +66,9 @@ public class UserService {
         }
         return users;
     }
+
     /*
-     * idを使用してユーザを取得
-     */
-    public UserForm findById(int id) {
-        User result = userRepository.findById(id).orElse(null);
-        UserForm user = setUserForm(result);
-        return user;
-    }
-    /*
-     * ユーザ情報の更新
+     * ユーザ情報の更新(ユーザの稼働状態と新規登録)
      */
     public void saveUser(UserForm userForm) {
         User saveUser = setUserEntity(userForm);
@@ -99,5 +92,11 @@ public class UserService {
         User result = userRepository.findById(id).orElse(null);
         UserForm user = setUserForm(result);
         return user;
+    }
+
+    public List<UserForm> findAllUserByAccount(String account) {
+        List<User> results = userRepository.findAllByAccount(account);
+        List<UserForm> users = setUserForm(results);
+        return users;
     }
 }
