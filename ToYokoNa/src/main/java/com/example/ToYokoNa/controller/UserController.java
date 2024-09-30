@@ -1,18 +1,26 @@
 package com.example.ToYokoNa.controller;
 
+import com.example.ToYokoNa.controller.form.BranchForm;
+import com.example.ToYokoNa.controller.form.DepartmentForm;
 import com.example.ToYokoNa.controller.form.UserForm;
 import com.example.ToYokoNa.repository.entity.User;
+import com.example.ToYokoNa.service.BranchService;
+import com.example.ToYokoNa.service.DepartmentService;
 import com.example.ToYokoNa.service.UserService;
 import com.example.ToYokoNa.utils.CipherUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -20,6 +28,10 @@ public class UserController {
     UserService userService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    BranchService branchService;
+    @Autowired
+    DepartmentService departmentService;
     // ログイン画面表示
     @GetMapping("/userLogin")
     public ModelAndView login() {
@@ -35,7 +47,7 @@ public class UserController {
      * ユーザーログイン処理
      */
     @PostMapping("/userLogin")
-    public ModelAndView login(@ModelAttribute("userForm") @Validated UserForm userForm,
+    public ModelAndView login(@ModelAttribute("userForm") @Validated({ UserForm.UserLogin.class }) UserForm userForm,
                               BindingResult bindingResult) {
         ModelAndView mav = new ModelAndView();
         if (bindingResult.hasErrors()) {
@@ -106,6 +118,52 @@ public class UserController {
         UserForm user = userService.findUser(id);
         mav.addObject("user", user);
         mav.setViewName("/userEdit");
+        return mav;
+    }
+
+    /*
+     * ユーザー新規登録画面表示
+     */
+    @GetMapping("/userCreate")
+    public ModelAndView userCreate(@ModelAttribute("userForm") UserForm userForm) {
+        ModelAndView mav = new ModelAndView();
+        // 支社と部署名をDBから持ってきたいので取得。
+        List<BranchForm> branches = branchService.findAllBranches();
+        List<DepartmentForm> departments = departmentService.findAllDepartments();
+        mav.addObject("branches", branches);
+        mav.addObject("departments", departments);
+        mav.setViewName("/userCreate");
+        return mav;
+    }
+    /*
+     * 新規ユーザー登録処理
+     */
+    @PostMapping("/userCreate")
+    public ModelAndView userCreate(@ModelAttribute("userForm") @Validated({ UserForm.UserCreate.class}) UserForm userForm,
+                                   BindingResult result) {
+        ModelAndView mav = new ModelAndView();
+        List<String> errorMessages = new ArrayList<>();
+        // ユーザー停止状態を0の稼働状態にする
+        userForm.setIsStopped(0);
+        // エラー処理
+        if (result.hasErrors()) {
+            for (ObjectError error : result.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+        }
+        if (errorMessages.size() > 0 ) {
+            mav.addObject("errorMessages", errorMessages);
+            mav.addObject("userForm", userForm);
+            // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
+            mav.addObject("departments", departmentService.findAllDepartments());
+            mav.addObject("branches", branchService.findAllBranches());
+            mav.setViewName("/userCreate");
+        } else {
+            // パスワードを暗号化する
+            userForm.setPassword(CipherUtil.encrypt(userForm.getPassword()));
+            userService.saveUser(userForm);
+            mav.setViewName("redirect:/userManage");
+        }
         return mav;
     }
 }
