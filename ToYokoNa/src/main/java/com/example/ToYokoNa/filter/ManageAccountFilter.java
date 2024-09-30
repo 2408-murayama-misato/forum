@@ -37,7 +37,6 @@ public class ManageAccountFilter implements Filter {
         List<String> errorMessages = new ArrayList<>();
         errorMessages.add("無効なアクセスです");
         httpSession.setAttribute("errorMessages", errorMessages);
-        httpResponse.sendRedirect("/");
     }
 
     @Override
