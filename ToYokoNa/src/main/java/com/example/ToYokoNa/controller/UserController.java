@@ -130,7 +130,7 @@ public class UserController {
      */
     @PutMapping("/userEdit/{id}")
     public ModelAndView userEdit(@PathVariable int id, @Validated({ UserForm.UserEdit.class }) UserForm userForm,
-                                 BindingResult result) {
+                                 BindingResult result) throws Exception {
         ModelAndView mav = new ModelAndView();
         List<String> errorMessages = new ArrayList<>();
         //パスワードの入力の有無チェック
@@ -144,18 +144,22 @@ public class UserController {
                 errorMessages.add(error.getDefaultMessage());
             }
         }
-        if (errorMessages.size() > 0 ) {
-            mav.addObject("errorMessages", errorMessages);
-            mav.addObject("userForm", userForm);
-            // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
-            mav.addObject("departments", departmentService.findAllDepartments());
-            mav.addObject("branches", branchService.findAllBranches());
-            mav.setViewName("/userEdit");
-        } else {
+        if (errorMessages.isEmpty()) {
             userForm.setPassword(CipherUtil.encrypt(userForm.getPassword()));
-            userService.saveUser(userForm);
-            mav.setViewName("redirect:/userManage");
+            try {
+                userService.updateUser(userForm);
+                mav.setViewName("redirect:/userManage");
+                return mav;
+            } catch (Exception e) {
+                errorMessages.add(e.getMessage());
+            }
         }
+        mav.addObject("errorMessages", errorMessages);
+        mav.addObject("userForm", userForm);
+        // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
+        mav.addObject("departments", departmentService.findAllDepartments());
+        mav.addObject("branches", branchService.findAllBranches());
+        mav.setViewName("/userEdit");
         return mav;
     }
 

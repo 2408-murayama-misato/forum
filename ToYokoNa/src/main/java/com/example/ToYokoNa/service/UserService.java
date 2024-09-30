@@ -75,6 +75,18 @@ public class UserService {
         userRepository.save(saveUser);
     }
 
+    public void updateUser(UserForm userForm) throws Exception {
+        // アカウント名重複チェック
+        User user = userRepository.findByAccount(userForm.getAccount());
+        if (user != null) {
+            if (user.getId() != userForm.getId()) {
+                throw new Exception("アカウントが重複しています");
+            }
+        }
+        User updateUser = setUserEntity(userForm);
+        userRepository.save(updateUser);
+    }
+
     private User setUserEntity(UserForm userForm) {
         User user = new User();
         user.setId(userForm.getId());
@@ -92,11 +104,5 @@ public class UserService {
         User result = userRepository.findById(id).orElse(null);
         UserForm user = setUserForm(result);
         return user;
-    }
-
-    public List<UserForm> findAllUserByAccount(String account) {
-        List<User> results = userRepository.findAllByAccount(account);
-        List<UserForm> users = setUserForm(results);
-        return users;
     }
 }

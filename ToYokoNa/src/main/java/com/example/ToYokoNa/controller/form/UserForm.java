@@ -1,20 +1,24 @@
 package com.example.ToYokoNa.controller.form;
 
 import com.example.ToYokoNa.Validation.CheckBlank;
-import com.example.ToYokoNa.Validation.EditUserUnique;
 import com.example.ToYokoNa.Validation.Unique;
+import com.example.ToYokoNa.repository.UserRepository;
+import com.example.ToYokoNa.repository.entity.User;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Getter
 @Setter
+@Component
 public class UserForm {
 
     //ログインorユーザ登録・編集でバリデーションの使用を分けたいのでグループ分け
@@ -26,7 +30,6 @@ public class UserForm {
 
     @CheckBlank(message = "アカウントを入力してください", groups = {UserLogin.class, UserCreate.class, UserEdit.class})
     @Unique(groups = {UserCreate.class}) //重複チェック
-    @EditUserUnique(groups = {UserEdit.class}) //編集時の重複チェック
     @Size(min = 6, max = 20, message = "アカウントは半角英数字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
     @Pattern(regexp= "^[A-Za-z0-9]+$", message = "アカウントは半角英数字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
     private String account;
@@ -70,7 +73,9 @@ public class UserForm {
         if (password.isEmpty() && passCheck.isEmpty()) {
             return true;
         }
-        if (password.length() >= 6 && password.length() <= 20 && password.matches("^[A-Za-z]+$")) return true;
+        if (password.length() >= 6 && password.length() <= 20 && password.matches("^[A-Za-z]+$")) {
+            return true;
+        }
         return false;
     }
 
