@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,16 +33,29 @@ public class MessageController {
     Top画面表示処理
      */
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
+                            @RequestParam(name = "endDate", required = false) String endDate,
+                            @RequestParam(name = "category", required = false) String category)
+                            throws ParseException {
         ModelAndView mav = new ModelAndView();
-        List<UserMessageForm> messages = messageService.findALLMessages();
+        UserForm loginUser = (UserForm)session.getAttribute("loginUser");
+        List<UserMessageForm> messages = messageService.findALLMessages(startDate, endDate, category);
         List<UserCommentForm> comments = commentService.findAllComments();
         CommentForm commentForm = new CommentForm();
+//　　　ユーザー管理画面表示フラグ
+        boolean isShowUserManage = false;
+        if (loginUser.getDepartmentId() == 1) {
+            isShowUserManage = true;
+        }
         mav.addObject("commentForm", commentForm);
         mav.addObject("comments", comments);
         mav.addObject("messages", messages);
         mav.addObject("errorMessages", session.getAttribute("errorMessages"));
-        mav.addObject("loginUser", session.getAttribute("loginUser"));
+        mav.addObject("loginUser", loginUser);
+        mav.addObject("isShowUserManage", isShowUserManage);
+        mav.addObject("startDate", startDate);
+        mav.addObject("endDate", endDate);
+        mav.addObject("category", category);
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");

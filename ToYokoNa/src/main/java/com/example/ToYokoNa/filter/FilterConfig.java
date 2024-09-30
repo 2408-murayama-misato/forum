@@ -15,6 +15,20 @@ public class FilterConfig {
         bean.addUrlPatterns("/userManage");
         bean.addUrlPatterns("/userEdit/*");
         bean.addUrlPatterns("/userCreate");
+        bean.setOrder(2);
+        return bean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<loginFilter> loginFilter() {
+        FilterRegistrationBean<loginFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new loginFilter());
+        bean.addUrlPatterns("/userEdit/*");
+        bean.addUrlPatterns("/");
+        bean.addUrlPatterns("/newMessage");
+        bean.addUrlPatterns("/userCreate");
+        bean.addUrlPatterns("/userManage");
+        bean.setOrder(1);
         return bean;
     }
 }
