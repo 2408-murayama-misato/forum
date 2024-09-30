@@ -41,6 +41,8 @@ public class UserController {
         mav.setViewName("userLogin");
         // 空のフォームの送信
         mav.addObject("userForm", userForm);
+        mav.addObject("errorMessage",session.getAttribute("errorMessage"));
+        session.removeAttribute("errorMessage");
         return mav;
     }
     /*
@@ -164,6 +166,16 @@ public class UserController {
             userService.saveUser(userForm);
             mav.setViewName("redirect:/userManage");
         }
+        return mav;
+    }
+//    ログアウト処理
+    @GetMapping("/logout")
+    public ModelAndView logout () {
+        session.removeAttribute("loginUser");
+        ModelAndView mav = new ModelAndView();
+        UserForm userForm = new UserForm();
+        mav.setViewName("/userLogin");
+        mav.addObject("userForm", userForm);
         return mav;
     }
 }

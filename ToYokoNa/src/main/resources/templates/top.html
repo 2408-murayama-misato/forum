@@ -15,12 +15,16 @@
             </div>
             <br />
         </div>
-　　　 　<!--　ユーザボタン表示フラグについて保留-->
-        <!--                ユーザー管理画面-->
+        <!--ユーザー管理画面表示フラグ-->
       <div th:if="${isShowUserManage}">
             <a href="/userManage">
                 <input type="button" value="ユーザー管理画面">
             </a>
+      </div>
+      <div class="logout">
+          <a href="/logout">
+              <input type="button" value="ログアウト">
+          </a>
       </div>
         <a href="/newMessage">
             <input type="button" value="新規投稿">
