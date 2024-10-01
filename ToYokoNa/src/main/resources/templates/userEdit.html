@@ -35,22 +35,46 @@
             <input th:field="*{name}" /><br/>
         </div>
         <br />
-        <div class="branch">
-            支社
-            <select th:field="*{branchId}">
-                <option value="">選択してください</option>
-                <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}"></option>
-            </select>
-            <br/>
+        <!-- ログインしているユーザ自身は自分の支社と部署を編集できないようdisabledオプションを設定 -->
+        <div th:if="${loginUser.id == userForm.id}">
+            <div class="branch">
+                支社
+                <select th:field="*{branchId}" disabled>
+                    <option value="">選択してください</option>
+                    <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}"></option>
+                </select>
+                <br/>
+            </div>
+            <br />
+            <div class="department">
+                部署
+                <select th:field="*{departmentId}" disabled>
+                    <option value="">選択してください</option>
+                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                </select>
+            </div>
         </div>
-        <br />
-        <div class="department">
-            部署
-            <select th:field="*{departmentId}">
-                <option value="">選択してください</option>
-                <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-            </select>
+        <!-- ログインユーザ以外のデータを変更する場合以下を表示 -->
+        <div th:if="${loginUser.id != userForm.id}">
+            <div class="branch">
+                支社
+                <select th:field="*{branchId}">
+                    <option value="">選択してください</option>
+                    <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}"></option>
+                </select>
+                <br/>
+            </div>
+            <br />
+            <div class="department">
+                部署
+                <select th:field="*{departmentId}">
+                    <option value="">選択してください</option>
+                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                </select>
+            </div>
         </div>
+    </div>
+
         <div class="isStopped">
             <input type="hidden" th:field="*{isStopped}">
         </div>
