@@ -7,6 +7,12 @@
 </head>
 <body>
     <h2>ユーザ管理画面</h2>
+    <div th:if="${errorMessages != null}">
+        <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
+            <li th:text="${errorMessage}"/>
+        </div>
+        <br />
+    </div>
     <a th:href="@{/userCreate}">
         <button class="create-user" type="button">ユーザ新規作成</button>
     </a>

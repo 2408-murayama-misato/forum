@@ -115,17 +115,36 @@ public class UserController {
     ユーザー編集画面表示
      */
     @GetMapping("/userEdit/{id}")
-    public ModelAndView userEdit (@PathVariable int id) {
+    public ModelAndView userEdit (@PathVariable String id, RedirectAttributes redirectAttributes) {
+        // URLの数字チェック
+        if (!id.matches("^[0-9]*$")) {
+            redirectAttributes.addFlashAttribute("errorMessages", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/userManage");
+        }
         ModelAndView mav = new ModelAndView();
-        UserForm user = userService.findUser(id);
-        mav.addObject("userForm", user);
-        // 支社と部署名をDBから持ってきたいので取得。
-        List<BranchForm> branches = branchService.findAllBranches();
-        List<DepartmentForm> departments = departmentService.findAllDepartments();
-        mav.addObject("branches", branches);
-        mav.addObject("departments", departments);
-        mav.setViewName("/userEdit");
-        return mav;
+        try {
+            UserForm user = userService.findUser(Integer.parseInt(id));
+            mav.addObject("userForm", user);
+            // 支社と部署名をDBから持ってきたいので取得。
+            List<BranchForm> branches = branchService.findAllBranches();
+            List<DepartmentForm> departments = departmentService.findAllDepartments();
+            mav.addObject("branches", branches);
+            mav.addObject("departments", departments);
+            mav.setViewName("/userEdit");
+            return mav;
+        } catch (Exception e) {
+            //idが存在しない値だった場合
+            redirectAttributes.addFlashAttribute("errorMessages", "不正なパラメータが入力されました");
+            return new ModelAndView("redirect:/userManage");
+        }
+    }
+    /*
+     * 編集画面表示(idがURLにのってなかった場合のバリデーションの役割)
+     */
+    @GetMapping({"/userEdit", "/userEdit/"})
+    public ModelAndView noIdEditTask (RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessages", "不正なパラメータが入力されました");
+        return new ModelAndView("redirect:/userManage");
     }
     /*
      * ユーザ編集処理
