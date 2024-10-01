@@ -9,14 +9,26 @@ body {
 
 
 .message-icon {
-	margin-bottom: 10px;
-
-	background-color: white;
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 2em;
+    border: dashed 2px #b3ada4;
+    background-image: repeating-linear-gradient(-45deg,#f2f3f7 0, #f2f3f7 3px,transparent 3px,transparent 6px);
 }
 
-/*.title, .name, .category, .content {
-    border-bottom-color: aqua;
-    border: solid 5px;
-    border-color: #00000040;
+.name, .category, .content {
+    background-color: #fff; /* ボックス背景色 */
+    	padding: 5px 2px 2px; /* ボックス内側余白 */
+    	box-shadow: 0px 1px 5px rgba(0,0,0,0.1);/*ボックス影*/
+    	position:relative;
 }
-*/
+.title {
+	background-color: #8b9b9d;
+        font-size: 1em;
+        color: #fff;
+        padding: 1px;
+        text-align: left;
+        width: 100%;
+        left: 0;
+        bottom: 30px;
+
