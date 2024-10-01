@@ -130,6 +130,8 @@ public class UserController {
             List<DepartmentForm> departments = departmentService.findAllDepartments();
             mav.addObject("branches", branches);
             mav.addObject("departments", departments);
+            UserForm loginUser = (UserForm)session.getAttribute("loginUser");
+            mav.addObject("loginUser", loginUser);
             mav.setViewName("/userEdit");
             return mav;
         } catch (Exception e) {
