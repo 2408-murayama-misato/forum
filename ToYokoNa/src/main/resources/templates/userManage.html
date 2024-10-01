@@ -66,9 +66,16 @@
                 </td>
                 <td>
                     <div th:if="${loginUser.id != user.id}">
-                        <form th:method="put" th:action="@{/{id}(id=${user.id})}">
-                            <input type="submit" value="状態変更" name="isStopped-button">
-                        </form>
+                        <div th:if="${user.isStopped == 0}">
+                            <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                                <input type="submit" value="停止" name="isStopped-button">
+                            </form>
+                        </div>
+                        <div th:if="${user.isStopped == 1}">
+                            <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                                <input type="submit" value="復活" name="isStopped-button">
+                            </form>
+                        </div>
                     </div>
                 </td>
             </tr>
