@@ -66,20 +66,25 @@ public class UserService {
         }
         return users;
     }
+
     /*
-     * idを使用してユーザを取得
-     */
-    public UserForm findById(int id) {
-        User result = userRepository.findById(id).orElse(null);
-        UserForm user = setUserForm(result);
-        return user;
-    }
-    /*
-     * ユーザ情報の更新
+     * ユーザ情報の更新(ユーザの稼働状態と新規登録)
      */
     public void saveUser(UserForm userForm) {
         User saveUser = setUserEntity(userForm);
         userRepository.save(saveUser);
+    }
+
+    public void updateUser(UserForm userForm) throws Exception {
+        // アカウント名重複チェック
+        User user = userRepository.findByAccount(userForm.getAccount());
+        if (user != null) {
+            if (user.getId() != userForm.getId()) {
+                throw new Exception("アカウントが重複しています");
+            }
+        }
+        User updateUser = setUserEntity(userForm);
+        userRepository.save(updateUser);
     }
 
     private User setUserEntity(UserForm userForm) {

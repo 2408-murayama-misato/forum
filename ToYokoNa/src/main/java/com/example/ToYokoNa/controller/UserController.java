@@ -99,7 +99,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ModelAndView changeIsStopped(@PathVariable("id") int id) {
         // 対象のユーザを取得
-        UserForm userData = userService.findById(id);
+        UserForm userData = userService.findUser(id);
         // ユーザのisStoppedの値を変更させる
         if (userData.getIsStopped() == 1) {
             userData.setIsStopped(0);
@@ -112,16 +112,59 @@ public class UserController {
     }
 
     /*
-    ユーザー編集機能
+    ユーザー編集画面表示
      */
     @GetMapping("/userEdit/{id}")
     public ModelAndView userEdit (@PathVariable int id) {
         ModelAndView mav = new ModelAndView();
         UserForm user = userService.findUser(id);
-        mav.addObject("user", user);
+        mav.addObject("userForm", user);
+        // 支社と部署名をDBから持ってきたいので取得。
+        List<BranchForm> branches = branchService.findAllBranches();
+        List<DepartmentForm> departments = departmentService.findAllDepartments();
+        mav.addObject("branches", branches);
+        mav.addObject("departments", departments);
         mav.setViewName("/userEdit");
         return mav;
     }
+    /*
+     * ユーザ編集処理
+     */
+    @PutMapping("/userEdit/{id}")
+    public ModelAndView userEdit(@PathVariable int id, @Validated({ UserForm.UserEdit.class }) UserForm userForm,
+                                 BindingResult result) throws Exception {
+        ModelAndView mav = new ModelAndView();
+        List<String> errorMessages = new ArrayList<>();
+        //パスワードの入力の有無チェック
+        if (userForm.getPassword().isEmpty()) {
+            userForm.setPassword(userService.findUser(id).getPassword());
+            userForm.setPassCheck(userService.findUser(id).getPassword());
+        }
+        // エラー処理
+        if (result.hasErrors()) {
+            for (ObjectError error : result.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+        }
+        if (errorMessages.isEmpty()) {
+            userForm.setPassword(CipherUtil.encrypt(userForm.getPassword()));
+            try {
+                userService.updateUser(userForm);
+                mav.setViewName("redirect:/userManage");
+                return mav;
+            } catch (Exception e) {
+                errorMessages.add(e.getMessage());
+            }
+        }
+        mav.addObject("errorMessages", errorMessages);
+        mav.addObject("userForm", userForm);
+        // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
+        mav.addObject("departments", departmentService.findAllDepartments());
+        mav.addObject("branches", branchService.findAllBranches());
+        mav.setViewName("/userEdit");
+        return mav;
+    }
+
 
     /*
      * ユーザー新規登録画面表示

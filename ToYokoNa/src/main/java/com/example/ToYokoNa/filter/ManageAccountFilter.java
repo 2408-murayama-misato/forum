@@ -30,7 +30,7 @@ public class ManageAccountFilter implements Filter {
 
         if (httpSession.getAttribute("loginUser") != null) {
             UserForm user = (UserForm)httpSession.getAttribute("loginUser");
-            if (user.getDepartmentId() == 1) {
+            if (user.getDepartmentId() == 1 && user.getBranchId() == 1) {
                 chain.doFilter(httpRequest, httpResponse); //処理を続ける(フィルターを抜ける)
 
             }

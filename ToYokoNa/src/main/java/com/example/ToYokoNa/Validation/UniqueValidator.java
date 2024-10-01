@@ -3,7 +3,6 @@ package com.example.ToYokoNa.Validation;
 import com.example.ToYokoNa.repository.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueValidator implements ConstraintValidator<Unique, String> {
