@@ -15,7 +15,7 @@
         <li th:text="${errorMessage}"/><br>
       </div>
     </div>
-      <form action="/addMessage" method="post" th:object="${messageForm}">
+      <form th:action="@{/addMessage}" method="post" th:object="${messageForm}">
         <div class="new-title">件名<br>
           <textarea  th:field="*{title}" rows="5" cols="30"></textarea>
         </div><br>
@@ -28,7 +28,7 @@
         <input type="submit" value="追加">
       </form>
     <div class="back">
-      <a href="./">
+      <a th:href="@{./}">
         <input type="button" value="戻る">
       </a>
     </div>
