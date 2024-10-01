@@ -90,6 +90,8 @@ public class UserController {
         List<UserForm> users = userService.findAllUser();
         mav.setViewName("/userManage");
         mav.addObject("users", users);
+        UserForm loginUser = (UserForm)session.getAttribute("loginUser");
+        mav.addObject("loginUser", loginUser);
         return mav;
     }
 
