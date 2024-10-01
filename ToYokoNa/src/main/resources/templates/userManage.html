@@ -11,7 +11,7 @@
         <button class="create-user" type="button">ユーザ新規作成</button>
     </a>
     <div>
-        <a href="/">
+        <a th:href="@{./}">
             戻る
         </a>
     </div>
@@ -66,7 +66,7 @@
             </tr>
         </div>
     </table>
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

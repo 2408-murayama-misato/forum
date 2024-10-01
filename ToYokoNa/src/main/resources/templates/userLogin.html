@@ -10,7 +10,7 @@
     <h1>ログイン</h1>
 </div>
 <!-- throwされたエラーに関しては上部に表示させる -->
-<div th:if="${errorMessage}">
+<div class="errorMessage" th:if="${errorMessage}">
     <p th:text="${errorMessage}"></p>
 </div>
     <form th:action="@{/userLogin}" th:method="post" th:object="${userForm}">

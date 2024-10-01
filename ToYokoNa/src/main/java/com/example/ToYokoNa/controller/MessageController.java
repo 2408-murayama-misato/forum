@@ -6,6 +6,7 @@ import com.example.ToYokoNa.service.MessageService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +36,8 @@ public class MessageController {
     @GetMapping
     public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
                             @RequestParam(name = "endDate", required = false) String endDate,
-                            @RequestParam(name = "category", required = false) String category)
+                            @RequestParam(name = "category", required = false) String category,
+                            Model model)
                             throws ParseException {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm)session.getAttribute("loginUser");
@@ -56,6 +58,8 @@ public class MessageController {
         mav.addObject("startDate", startDate);
         mav.addObject("endDate", endDate);
         mav.addObject("category", category);
+        mav.addObject("messageId", model.getAttribute("messageId"));
+        mav.addObject("commentErrorMessages", model.getAttribute("commentErrorMessages"));
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");

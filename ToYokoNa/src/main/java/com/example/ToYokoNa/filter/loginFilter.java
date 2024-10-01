@@ -29,7 +29,7 @@ public class loginFilter implements Filter {
         } else {
             String errorMessage = "ログインしてください";
             session.setAttribute("errorMessage", errorMessage);
-            httpResponse.sendRedirect("/userLogin");
+            httpResponse.sendRedirect("/ToYokoNa/userLogin");
         }
     }
 

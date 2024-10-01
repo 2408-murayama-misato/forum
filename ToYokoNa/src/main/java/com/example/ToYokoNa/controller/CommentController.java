@@ -41,7 +41,7 @@ public class CommentController {
             }
         }
         if (errorMessages.size() > 0){
-            redirectAttributes.addFlashAttribute("errorMessages", errorMessages);
+            redirectAttributes.addFlashAttribute("commentErrorMessages", errorMessages);
             redirectAttributes.addFlashAttribute("messageId", messageId);
             mav.setViewName("redirect:/");
         } else {

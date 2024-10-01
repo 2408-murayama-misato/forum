@@ -17,16 +17,16 @@
         </div>
         <!--ユーザー管理画面表示フラグ-->
       <div th:if="${isShowUserManage}">
-            <a href="/userManage">
+            <a th:href="@{/userManage}">
                 <input type="button" value="ユーザー管理画面">
             </a>
       </div>
       <div class="logout">
-          <a href="/logout">
+          <a th:href="@{/logout}">
               <input type="button" value="ログアウト">
           </a>
       </div>
-        <a href="/newMessage">
+        <a th:href="@{/newMessage}">
             <input type="button" value="新規投稿">
         </a>
         <div class="search">
@@ -62,7 +62,7 @@
             <div class="comment" th:each="comment : ${comments}">
                 <div th:if="${comment.messageId == message.id}">
                     <div class="content">
-                        コメント内容：<span th:text="${comment.text}"/>
+                        コメント内容：<pre><span th:text="${comment.text}"/></pre>
                     </div>
                     <div class="name">
                         投稿者:<span th:text="${comment.userName}"/>
@@ -71,17 +71,19 @@
                         投稿日時:<span th:text="${#dates.format(comment.createdDate, 'yyyy/MM/dd')}"/>
                     </div>
                     <div class="comment-delete">
-                        <form th:method="delete" th:action="@{/deleteComment/{id}(id=${comment.id})}">
-                            <input type="submit" name="delete-button" value="コメント削除">
-                        </form>
+                        <div th:if="${comment.userId == loginUser.id}">
+                            <form th:method="delete" th:action="@{/deleteComment/{id}(id=${comment.id})}">
+                                <input type="submit" name="delete-button" value="コメント削除">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="comment-form">
                 コメント<br>
-                <div th:if="${errorMessages != null && message.id == messageId}">
-                    <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-                        <li th:text="${errorMessage}"/><br>
+                <div th:if="${commentErrorMessages != null && message.id == messageId}">
+                    <div class="errorMessages" th:each="commentErrorMessage : ${commentErrorMessages}">
+                        <li th:text="${commentErrorMessage}"/><br>
                     </div>
                 </div>
                 <form method="post" th:action="@{/commentAdd/{messageId}(messageId=${message.id})}" th:object="${commentForm}">
@@ -90,7 +92,7 @@
                 </form>
             </div><br>
         </div>
-        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/js/main.js}"></script>
     </body>
 </html>
