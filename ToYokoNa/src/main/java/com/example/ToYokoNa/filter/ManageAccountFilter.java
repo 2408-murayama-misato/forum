@@ -20,25 +20,22 @@ public class ManageAccountFilter implements Filter {
     private HttpSession httpSession;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain ) throws IOException, ServletException {
+                         FilterChain chain ) throws ServletException, IOException {
         // 型変換
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // セッション情報を利用できるようにするためにgetSessionして取得。
         httpSession = httpRequest.getSession();
-
-        if (httpSession.getAttribute("loginUser") != null) {
-            UserForm user = (UserForm)httpSession.getAttribute("loginUser");
-            if (user.getDepartmentId() == 1 && user.getBranchId() == 1) {
+        UserForm user = (UserForm)httpSession.getAttribute("loginUser");
+        if (user.getDepartmentId() == 1 && user.getBranchId() == 1) {
                 chain.doFilter(httpRequest, httpResponse); //処理を続ける(フィルターを抜ける)
-
-            }
+        } else {
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add("無効なアクセスです");
+            httpSession.setAttribute("errorMessages", errorMessages);
+            httpResponse.sendRedirect("/");
         }
-        List<String> errorMessages = new ArrayList<>();
-        errorMessages.add("無効なアクセスです");
-        httpSession.setAttribute("errorMessages", errorMessages);
-        httpResponse.sendRedirect("/");
     }
 
     @Override
