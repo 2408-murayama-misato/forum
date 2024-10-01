@@ -36,7 +36,7 @@ public class UserForm {
 
     @CheckBlank(message = "パスワードを入力してください", groups = {UserLogin.class, UserCreate.class})
     @Size(min = 6, max = 20, message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
-    @Pattern(regexp = "^[A-Za-z]+$", message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
+    @Pattern(regexp = "^[\\x20-\\x7E]+$", message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
     private String password;
     private String passCheck;
 
@@ -73,7 +73,7 @@ public class UserForm {
         if (password.isEmpty() && passCheck.isEmpty()) {
             return true;
         }
-        if (password.length() >= 6 && password.length() <= 20 && password.matches("^[A-Za-z]+$")) {
+        if (password.length() >= 6 && password.length() <= 20 && password.matches("^[\\x20-\\x7E]+$")) {
             return true;
         }
         return false;
