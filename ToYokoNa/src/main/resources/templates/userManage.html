@@ -7,6 +7,12 @@
 </head>
 <body>
     <h2>ユーザ管理画面</h2>
+    <div th:if="${errorMessages != null}">
+        <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
+            <li th:text="${errorMessage}"/>
+        </div>
+        <br />
+    </div>
     <a th:href="@{/userCreate}">
         <button class="create-user" type="button">ユーザ新規作成</button>
     </a>
@@ -59,9 +65,18 @@
                     </a>
                 </td>
                 <td>
-                    <form th:method="put" th:action="@{/{id}(id=${user.id})}">
-                        <input type="submit" value="状態変更" name="isStopped-button">
-                    </form>
+                    <div th:if="${loginUser.id != user.id}">
+                        <div th:if="${user.isStopped == 0}">
+                            <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                                <input type="submit" value="停止" name="isStopped-button">
+                            </form>
+                        </div>
+                        <div th:if="${user.isStopped == 1}">
+                            <form th:method="put" th:action="@{/{id}(id=${user.id})}">
+                                <input type="submit" value="復活" name="isStopped-button">
+                            </form>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </div>
