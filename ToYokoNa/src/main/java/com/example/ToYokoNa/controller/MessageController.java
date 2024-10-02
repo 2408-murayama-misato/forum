@@ -60,7 +60,8 @@ public class MessageController {
         mav.addObject("category", category);
         mav.addObject("messageId", model.getAttribute("messageId"));
         mav.addObject("commentErrorMessages", model.getAttribute("commentErrorMessages"));
-        mav.addObject("deleteErrorMessage", model.getAttribute("deleteErrorMessage"));
+        mav.addObject("deleteErrorMessage", session.getAttribute("deleteErrorMessage"));
+        mav.addObject("deleteErrorMessageId", session.getAttribute("messageId"));
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");
@@ -108,11 +109,9 @@ public class MessageController {
     public ModelAndView deleteMessage(@PathVariable int id,
                                       @RequestParam("messageUserId") int messageUserId,
                                       @RequestParam("messageBranch") int messageBranch,
-                                      @RequestParam("messageDepartment") int messageDepartment,
-                                      RedirectAttributes redirectAttributes) {
+                                      @RequestParam("messageDepartment") int messageDepartment) {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        MessageForm message = messageService.findMessage(id);
         if (loginUser.getId() == messageUserId) {
             messageService.deleteMessage(id);
             mav.setViewName("redirect:/");
@@ -127,11 +126,10 @@ public class MessageController {
             return mav;
         } else {
             String errorMessage ="この投稿は削除できません";
-            redirectAttributes.addFlashAttribute("deleteErrorMessage", errorMessage);
-            redirectAttributes.addFlashAttribute("messageId", id);
+            session.setAttribute("deleteErrorMessage", errorMessage);
+            session.setAttribute("messageId", id);
             mav.setViewName("redirect:/");
             return mav;
         }
-
     }
 }

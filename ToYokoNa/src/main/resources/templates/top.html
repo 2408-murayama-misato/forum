@@ -37,7 +37,7 @@
             </form>
         </div>
         <div class="message-icon" th:each="message : ${messages}">
-            <div th:if="${deleteErrorMessage != null && message.id == messageId}">
+            <div th:if="${deleteErrorMessage != null && message.id == deleteErrorMessageId}">
                 <div class="errorMessages>">
                     <li th:text="${deleteErrorMessage}"/>
                 </div>
@@ -57,7 +57,8 @@
             <div class="created-date">
                 投稿日時:<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd HH:mm')}"/>
             </div>
-            <div >
+                <div th:if="${message.userId == loginUser.id || loginUser.departmentId == 2 ||
+                (loginUser.branchId == message.branchId && loginUser.departmentId == 3 && message.departmentId == 4)}">
                 <div class="message-delete">
                     <form th:method="delete" th:action="@{/deleteMessage/{id}(id=${message.id})}">
                         <input type="hidden" name="messageUserId" id="messageUserId" th:value="${message.userId}">
