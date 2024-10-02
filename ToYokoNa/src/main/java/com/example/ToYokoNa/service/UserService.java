@@ -39,6 +39,7 @@ public class UserService {
         user.setBranchId(result.getBranchId());
         user.setDepartmentId(result.getDepartmentId());
         user.setIsStopped(result.getIsStopped());
+        user.setLoginTime(new Date());
         return user;
     }
     /*
@@ -106,23 +107,25 @@ public class UserService {
         return user;
     }
 
-    // ログイン時刻の更新
-    public void saveUserLoginTime(UserForm userForm) {
-        User userData = setUserLoginEntity(userForm);
-        userRepository.save(userData);
-    }
-
-    private User setUserLoginEntity(UserForm userForm) {
-        User user = new User();
-        user.setId(userForm.getId());
-        user.setPassword(userForm.getPassword());
-        user.setAccount(userForm.getAccount());
-        user.setName(userForm.getName());
-        user.setBranchId(userForm.getBranchId());
-        user.setDepartmentId(userForm.getDepartmentId());
-        user.setIsStopped(userForm.getIsStopped());
-        user.setUpdatedDate(new Date());
-        user.setLoginTime(new Date());
-        return user;
-    }
+//    // ログイン時刻の更新と更新後のデータ取得
+//    public User saveUserLoginTime(UserForm userForm) {
+//        User userData = setUserLoginEntity(userForm);
+//        userRepository.save(userData);
+//        User result = userRepository.findById(userData.getId()).orElse(null);
+//        UserForm user = setUserForm(result);
+//        return result;
+//    }
+//
+//    private User setUserLoginEntity(UserForm userForm) {
+//        User user = new User();
+//        user.setId(userForm.getId());
+//        user.setPassword(userForm.getPassword());
+//        user.setAccount(userForm.getAccount());
+//        user.setName(userForm.getName());
+//        user.setBranchId(userForm.getBranchId());
+//        user.setDepartmentId(userForm.getDepartmentId());
+//        user.setIsStopped(userForm.getIsStopped());
+//        user.setLoginTime(new Date());
+//        return user;
+//    }
 }
