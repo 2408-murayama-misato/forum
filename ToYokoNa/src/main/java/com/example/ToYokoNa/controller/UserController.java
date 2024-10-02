@@ -76,6 +76,8 @@ public class UserController {
         }
         // セッションに値をセット
         session.setAttribute("loginUser", userData);
+        // 最終ログイン時間を更新する処理実行
+        userService.saveUserLoginTime(userForm);
         // topにリダイレクト
         mav.setViewName("redirect:/");
         return mav;

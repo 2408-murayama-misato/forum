@@ -41,6 +41,9 @@ public class User {
     @Column(name="updated_date", insertable = false)
     private Date updatedDate;
 
+    @Column(name="login_time", nullable = true)
+    private Date loginTime;
+
     @OneToMany(mappedBy = "user")
     private List<Message> message;
   
