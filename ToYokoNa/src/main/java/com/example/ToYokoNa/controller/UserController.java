@@ -184,6 +184,8 @@ public class UserController {
             // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
             mav.addObject("departments", departmentService.findAllDepartments());
             mav.addObject("branches", branchService.findAllBranches());
+            UserForm loginUser = (UserForm)session.getAttribute("loginUser");
+            mav.addObject("loginUser", loginUser);
             mav.setViewName("/userEdit");
             return mav;
         }
