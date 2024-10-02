@@ -1,6 +1,11 @@
 .errorMessages {
             color: red;
         }
+.new-errorMessages {
+    color: red;
+    text-align: center;
+}
+
 
 .errorMessage {
     color: red
@@ -10,7 +15,18 @@ body {
 	background-color: #e0f9ff;
 }
 
+.search {
+    display: flex;
+    margin-top: 20px;
+}
 
+input[type="button"] {
+    float: left;
+    margin-right: 20px;
+}
+.add-message {
+    text-align: center;
+}
 
 .message-icon {
     margin-bottom: 10px;
