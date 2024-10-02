@@ -3,10 +3,10 @@
 <head>
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>ユーザ登録</title>
+    <title>ユーザ新規作成</title>
 </head>
 <body>
-    <h2>ユーザ登録</h2>
+    <h2>ユーザ新規作成</h2>
     <div th:if="${errorMessages != null}">
         <div class="errorMessages" th:each="errorMessage : ${errorMessages} ">
             <li th:text="${errorMessage}"/>
@@ -30,7 +30,7 @@
                 <input type="password" th:field="*{passCheck}" /><br/>
             </div>
             <br />
-            <div class="name">
+            <div class="userName">
                 氏名
                 <input th:field="*{name}" /><br/>
             </div>
@@ -52,7 +52,7 @@
                 </select>
             </div>
             <br />
-            <input type="submit" value="追加">
+            <input type="submit" value="登録">
         </div>
     </form>
     <br />

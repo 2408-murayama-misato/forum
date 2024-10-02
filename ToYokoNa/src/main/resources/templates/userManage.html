@@ -22,12 +22,14 @@
         </a>
     </div>
     <table class="users">
-        <tr>
+        <tr class="usersTableTitle">
             <th>アカウント名</th>
             <th>氏名</th>
             <th>支社名</th>
             <th>部署名</th>
             <th>ユーザー停止状態</th>
+            <th>編集</th>
+            <th>稼働状態切り替え</th>
         </tr>
         <div th:each="user : ${users}">
             <tr>
@@ -68,12 +70,12 @@
                     <div th:if="${loginUser.id != user.id}">
                         <div th:if="${user.isStopped == 0}">
                             <form th:method="put" th:action="@{/{id}(id=${user.id})}">
-                                <input type="submit" value="停止" name="isStopped-button">
+                                <input type="submit" value="停止" name="isStopped-button" class="off">
                             </form>
                         </div>
                         <div th:if="${user.isStopped == 1}">
                             <form th:method="put" th:action="@{/{id}(id=${user.id})}">
-                                <input type="submit" value="復活" name="isStopped-button">
+                                <input type="submit" value="復活" name="isStopped-button" class="on">
                             </form>
                         </div>
                     </div>
