@@ -2,15 +2,11 @@ package com.example.ToYokoNa.controller.form;
 
 import com.example.ToYokoNa.Validation.CheckBlank;
 import com.example.ToYokoNa.Validation.Unique;
-import com.example.ToYokoNa.repository.UserRepository;
-import com.example.ToYokoNa.repository.entity.User;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -23,22 +19,39 @@ public class UserForm {
 
     //ログインorユーザ登録・編集でバリデーションの使用を分けたいのでグループ分け
     public static interface UserLogin{}
-    public static interface UserCreate{}
+    public static interface UserCreate{} // 入力の必須チェックメイン
     public static interface UserEdit{}
+
 
     private int id;
 
     @CheckBlank(message = "アカウントを入力してください", groups = {UserLogin.class, UserCreate.class, UserEdit.class})
     @Unique(groups = {UserCreate.class}) //重複チェック
-    @Size(min = 6, max = 20, message = "アカウントは半角英数字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
-    @Pattern(regexp= "^[A-Za-z0-9]+$", message = "アカウントは半角英数字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
     private String account;
 
+    @AssertTrue(message = "アカウントは半角英数字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
+    private boolean isAccountValid() {
+        if (account.isBlank()) {
+            return true; //アカウント名が空の場合は@CheckBlankでまずバリデーションするため処理を抜ける
+        } else {
+            // 以下の条件を満たしていない場合はエラーメッセージを表示する
+            return (account.length() >= 6 && account.length() <= 20 && account.matches("^[A-Za-z0-9]+$"));
+        }
+    }
+
     @CheckBlank(message = "パスワードを入力してください", groups = {UserLogin.class, UserCreate.class})
-    @Size(min = 6, max = 20, message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
-    @Pattern(regexp = "^[\\x20-\\x7E]+$", message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
     private String password;
     private String passCheck;
+
+    @AssertTrue(message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserCreate.class})
+    private boolean isPasswordValid() {
+        if (password.isBlank()) {
+            return true; //パスワードが空の場合は@CheckBlankでまずバリデーションするため処理を抜ける
+        } else {
+            // 以下の条件を満たしていない場合はエラーメッセージを表示する
+            return (password.length() >= 6 && password.length() <= 20 && password.matches("^[\\x20-\\x7E]+$"));
+        }
+    }
 
     @AssertTrue(message = "パスワードと確認用パスワードが一致しません", groups = {UserCreate.class, UserEdit.class})
     private boolean isSamePassword() {
@@ -46,8 +59,17 @@ public class UserForm {
     }
 
     @CheckBlank(message = "氏名を入力してください", groups = {UserCreate.class, UserEdit.class})
-    @Size(max = 10, message = "氏名は10文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
+    @Size(max = 10)
     private String name;
+
+    @AssertTrue(message = "氏名は10文字以下で入力してください", groups = {UserCreate.class, UserEdit.class})
+    private boolean isMessageValid() {
+        if (name.isBlank()) {
+            return true;
+        } else {
+            return (name.length() <= 10);
+        }
+    }
 
     @NotNull(message = "支社を選択してください", groups = {UserCreate.class, UserEdit.class})
     private Integer branchId;
@@ -68,7 +90,7 @@ public class UserForm {
     }
 
     @AssertTrue(message = "パスワードは半角文字かつ6文字以上20文字以下で入力してください", groups = {UserEdit.class})
-    public boolean isPasswordValid() {
+    public boolean isEditPasswordValid() {
         //  パスワードが2つとも何も入力されていなければバリデーションはかけない
         if (password.isEmpty() && passCheck.isEmpty()) {
             return true;

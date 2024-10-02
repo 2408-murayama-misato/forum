@@ -3,7 +3,6 @@ package com.example.ToYokoNa.controller;
 import com.example.ToYokoNa.controller.form.BranchForm;
 import com.example.ToYokoNa.controller.form.DepartmentForm;
 import com.example.ToYokoNa.controller.form.UserForm;
-import com.example.ToYokoNa.repository.entity.User;
 import com.example.ToYokoNa.service.BranchService;
 import com.example.ToYokoNa.service.DepartmentService;
 import com.example.ToYokoNa.service.UserService;
@@ -146,7 +145,7 @@ public class UserController {
      * 編集画面表示(idがURLにのってなかった場合のバリデーションの役割)
      */
     @GetMapping({"/userEdit", "/userEdit/"})
-    public ModelAndView noIdEditTask (RedirectAttributes redirectAttributes) {
+    public ModelAndView noIdEditUser (RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("errorMessages", "不正なパラメータが入力されました");
         return new ModelAndView("redirect:/userManage");
     }
@@ -154,7 +153,7 @@ public class UserController {
      * ユーザ編集処理
      */
     @PutMapping("/userEdit/{id}")
-    public ModelAndView userEdit(@PathVariable int id, @Validated({ UserForm.UserEdit.class }) UserForm userForm,
+    public ModelAndView userEdit(@PathVariable int id, @Validated({UserForm.UserEdit.class}) UserForm userForm,
                                  BindingResult result) throws Exception {
         ModelAndView mav = new ModelAndView();
         List<String> errorMessages = new ArrayList<>();
@@ -179,15 +178,17 @@ public class UserController {
                 errorMessages.add(e.getMessage());
             }
         }
-        mav.addObject("errorMessages", errorMessages);
-        mav.addObject("userForm", userForm);
-        // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
-        mav.addObject("departments", departmentService.findAllDepartments());
-        mav.addObject("branches", branchService.findAllBranches());
-        mav.setViewName("/userEdit");
+        if (errorMessages.size() > 0) {
+            mav.addObject("errorMessages", errorMessages);
+            mav.addObject("userForm", userForm);
+            // 部署と支店情報が選択肢からなくなってしまうので2つもmavにaddする
+            mav.addObject("departments", departmentService.findAllDepartments());
+            mav.addObject("branches", branchService.findAllBranches());
+            mav.setViewName("/userEdit");
+            return mav;
+        }
         return mav;
     }
-
 
     /*
      * ユーザー新規登録画面表示
@@ -207,7 +208,7 @@ public class UserController {
      * 新規ユーザー登録処理
      */
     @PostMapping("/userCreate")
-    public ModelAndView userCreate(@ModelAttribute("userForm") @Validated({ UserForm.UserCreate.class}) UserForm userForm,
+    public ModelAndView userCreate(@ModelAttribute("userForm") @Validated({UserForm.UserCreate.class}) UserForm userForm,
                                    BindingResult result) {
         ModelAndView mav = new ModelAndView();
         List<String> errorMessages = new ArrayList<>();
