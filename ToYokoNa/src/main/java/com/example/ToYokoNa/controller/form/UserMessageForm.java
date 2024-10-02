@@ -22,4 +22,8 @@ public class UserMessageForm {
 
     private String userName;
 
+    private Integer departmentId;
+
+    private Integer branchId;
+
 }

@@ -68,6 +68,8 @@ public class MessageService {
             userMessageForm.setUserName(message.getUser().getName());
             userMessageForm.setCreatedDate(message.getCreatedDate());
             userMessageForm.setCategory(message.getCategory());
+            userMessageForm.setDepartmentId(message.getUser().getDepartmentId());
+            userMessageForm.setBranchId(message.getUser().getBranchId());
             messages.add(userMessageForm);
         }
         return messages;

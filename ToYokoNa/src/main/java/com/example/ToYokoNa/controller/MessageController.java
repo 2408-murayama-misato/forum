@@ -60,6 +60,8 @@ public class MessageController {
         mav.addObject("category", category);
         mav.addObject("messageId", model.getAttribute("messageId"));
         mav.addObject("commentErrorMessages", model.getAttribute("commentErrorMessages"));
+        mav.addObject("deleteErrorMessage", session.getAttribute("deleteErrorMessage"));
+        mav.addObject("deleteErrorMessageId", session.getAttribute("messageId"));
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");
@@ -104,15 +106,30 @@ public class MessageController {
     投稿削除処理
      */
     @DeleteMapping("/deleteMessage/{id}")
-    public ModelAndView deleteMessage(@PathVariable int id) {
+    public ModelAndView deleteMessage(@PathVariable int id,
+                                      @RequestParam("messageUserId") int messageUserId,
+                                      @RequestParam("messageBranch") int messageBranch,
+                                      @RequestParam("messageDepartment") int messageDepartment) {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        MessageForm message = messageService.findMessage(id);
-        List<String> errorMessages = new ArrayList<>();
-        if (loginUser.getId() == message.getUserId()) {
+        if (loginUser.getId() == messageUserId) {
             messageService.deleteMessage(id);
+            mav.setViewName("redirect:/");
+            return mav;
+        } else if (loginUser.getDepartmentId() == 2) {
+                messageService.deleteMessage(id);
+                mav.setViewName("redirect:/");
+                return mav;
+        } else if (loginUser.getBranchId() == messageBranch && loginUser.getDepartmentId() == 3 && messageDepartment == 4) {
+            messageService.deleteMessage(id);
+            mav.setViewName("redirect:/");
+            return mav;
+        } else {
+            String errorMessage ="この投稿は削除できません";
+            session.setAttribute("deleteErrorMessage", errorMessage);
+            session.setAttribute("messageId", id);
+            mav.setViewName("redirect:/");
+            return mav;
         }
-        mav.setViewName("redirect:/");
-        return mav;
     }
 }
