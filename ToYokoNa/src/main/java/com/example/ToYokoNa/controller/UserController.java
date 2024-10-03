@@ -87,10 +87,12 @@ public class UserController {
     public ModelAndView userManage() {
         ModelAndView mav = new ModelAndView();
         List<UserForm> users = userService.findAllUser();
+        List<BranchForm> branchForms = branchService.findAllBranches();
         mav.setViewName("/userManage");
         mav.addObject("users", users);
         UserForm loginUser = (UserForm)session.getAttribute("loginUser");
         mav.addObject("loginUser", loginUser);
+        mav.addObject("branchForms", branchForms);
         return mav;
     }
 

@@ -3,7 +3,11 @@ package com.example.ToYokoNa.service;
 import com.example.ToYokoNa.controller.form.MessageForm;
 import com.example.ToYokoNa.controller.form.UserForm;
 import com.example.ToYokoNa.controller.form.UserMessageForm;
+import com.example.ToYokoNa.repository.BranchRepository;
+import com.example.ToYokoNa.repository.CommentRepository;
 import com.example.ToYokoNa.repository.MessageRepository;
+import com.example.ToYokoNa.repository.UserRepository;
+import com.example.ToYokoNa.repository.entity.Comment;
 import com.example.ToYokoNa.repository.entity.Message;
 import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,18 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 public class MessageService {
     @Autowired
     MessageRepository messageRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    BranchRepository branchRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     /*
     全投稿取得処理
@@ -77,10 +93,13 @@ public class MessageService {
     /*
     投稿追加処理
      */
+    @Transactional
     public void save(MessageForm messageForm, UserForm loginUser) {
         messageForm.setUserId(loginUser.getId());
         Message message = setMessage(messageForm);
         messageRepository.save(message);
+        userRepository.countUpMessage(loginUser.getId());
+        branchRepository.countUpMessage(loginUser.getBranchId());
     }
 
     private Message setMessage(MessageForm messageForm) {
@@ -116,7 +135,16 @@ public class MessageService {
     /*
     投稿削除処理
      */
-    public void deleteMessage(int id) {
+    @Transactional
+    public void deleteMessage(int id, int messageUserId, int messageBranch) {
         messageRepository.deleteById(id);
+        userRepository.countDownMessage(messageUserId);
+        branchRepository.countDownMessage(messageBranch);
+        List<Comment> comments = commentRepository.findByMessageId(id);
+        if (!comments.isEmpty()) {
+            for (Comment comment : comments) {
+                commentService.deleteComment(comment.getId(), comment.getUserId());
+            }
+        }
     }
 }

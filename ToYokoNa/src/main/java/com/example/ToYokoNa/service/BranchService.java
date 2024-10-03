@@ -15,7 +15,7 @@ public class BranchService {
     BranchRepository branchRepository;
 
     public List<BranchForm> findAllBranches() {
-        List<Branch> results = branchRepository.findAll();
+        List<Branch> results = branchRepository.findAllByOrderByIdAsc();
         List<BranchForm> branches = setBranchForm(results);
         return branches;
     }
@@ -27,6 +27,8 @@ public class BranchService {
             Branch result = results.get(i);
             branch.setId(result.getId());
             branch.setName(result.getName());
+            branch.setCommentCount(result.getCommentCount());
+            branch.setMessageCount(result.getMessageCount());
             branches.add(branch);
         }
         return branches;

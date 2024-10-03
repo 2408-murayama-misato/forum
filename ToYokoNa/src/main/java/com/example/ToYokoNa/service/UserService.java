@@ -1,6 +1,7 @@
 package com.example.ToYokoNa.service;
 
 import com.example.ToYokoNa.controller.form.UserForm;
+import com.example.ToYokoNa.repository.MessageRepository;
 import com.example.ToYokoNa.repository.UserRepository;
 import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    MessageRepository messageRepository;
 
     /*
      * ログインユーザー情報取得(ログイン処理)
@@ -66,6 +70,8 @@ public class UserService {
             user.setBranchId(result.getBranchId());
             user.setDepartmentId(result.getDepartmentId());
             user.setIsStopped(result.getIsStopped());
+            user.setMessageCount(result.getMessageCount());
+            user.setCommentCount(result.getCommentCount());
             users.add(user);
         }
         return users;

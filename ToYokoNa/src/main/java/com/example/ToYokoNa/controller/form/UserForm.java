@@ -105,4 +105,6 @@ public class UserForm {
     private Date createdDate;
     private Date updatedDate;
     private String loginTime;
+    private int messageCount;
+    private int commentCount;
 }

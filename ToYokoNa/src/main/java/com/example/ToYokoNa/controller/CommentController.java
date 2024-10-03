@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -55,9 +52,10 @@ public class CommentController {
     コメントの削除機能
      */
     @DeleteMapping("/deleteComment/{id}")
-    public ModelAndView deleteComment (@PathVariable int id) {
+    public ModelAndView deleteComment (@PathVariable int id,
+                                       @RequestParam("commentUserId") int commentUserId) {
         ModelAndView mav = new ModelAndView();
-        commentService.deleteComment(id);
+        commentService.deleteComment(id, commentUserId);
         mav.setViewName("redirect:/");
         return mav;
     }
