@@ -104,4 +104,5 @@ public class UserForm {
     private Integer isStopped;
     private Date createdDate;
     private Date updatedDate;
+    private String loginTime;
 }

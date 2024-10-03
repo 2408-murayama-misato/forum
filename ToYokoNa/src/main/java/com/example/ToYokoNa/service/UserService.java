@@ -6,6 +6,7 @@ import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,9 @@ public class UserService {
             throw new Exception("ログインに失敗しました");
         }
         UserForm user = setUserForm(result);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String loginDate = sdf.format(new Date());
+        user.setLoginTime(loginDate);
         return user;
     }
 
@@ -105,4 +109,26 @@ public class UserService {
         UserForm user = setUserForm(result);
         return user;
     }
+
+//    // ログイン時刻の更新と更新後のデータ取得
+//    public User saveUserLoginTime(UserForm userForm) {
+//        User userData = setUserLoginEntity(userForm);
+//        userRepository.save(userData);
+//        User result = userRepository.findById(userData.getId()).orElse(null);
+//        UserForm user = setUserForm(result);
+//        return result;
+//    }
+//
+//    private User setUserLoginEntity(UserForm userForm) {
+//        User user = new User();
+//        user.setId(userForm.getId());
+//        user.setPassword(userForm.getPassword());
+//        user.setAccount(userForm.getAccount());
+//        user.setName(userForm.getName());
+//        user.setBranchId(userForm.getBranchId());
+//        user.setDepartmentId(userForm.getDepartmentId());
+//        user.setIsStopped(userForm.getIsStopped());
+//        user.setLoginTime(new Date());
+//        return user;
+//    }
 }

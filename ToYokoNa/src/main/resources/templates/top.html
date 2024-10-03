@@ -15,6 +15,10 @@
             </div>
             <br />
         </div>
+        <div class="userInfo">
+            <span th:text="${loginUser.name}" />さん、ようこそ！<br />
+            最終ログイン：<span th:text="${loginUser.loginTime}" />
+        </div>
         <!--ユーザー管理画面表示フラグ-->
       <div th:if="${isShowUserManage}">
             <a th:href="@{/userManage}">
