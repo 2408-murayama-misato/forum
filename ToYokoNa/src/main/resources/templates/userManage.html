@@ -20,13 +20,35 @@
         <a th:href="@{/}">
             <input type="button" value="戻る">
         </a>
-    </div>
+    </div><br>
+    <table class="branches">
+        <tr class="branchesTableTitle">
+            <th>支社名</th>
+            <th>投稿数</th>
+            <th>コメント数</th>
+        </tr>
+        <div th:each="branch : ${branchForms}">
+            <tr>
+                <td>
+                    <p th:text="${branch.name}"/>
+                </td>
+                <td>
+                    <p th:text="${branch.messageCount}"/>
+                </td>
+                <td>
+                    <p th:text="${branch.commentCount}"/>
+                </td>
+            </tr>
+        </div><br>
+    </table>
     <table class="users">
         <tr class="usersTableTitle">
             <th>アカウント名</th>
             <th>氏名</th>
             <th>支社名</th>
             <th>部署名</th>
+            <th>投稿数</th>
+            <th>コメント数</th>
             <th>ユーザー停止状態</th>
             <th>編集</th>
             <th>稼働状態切り替え</th>
@@ -54,6 +76,12 @@
                         <span th:case=3 th:text="営業部" />
                         <span th:case=4 th:text="技術部" />
                     </th:block>
+                </td>
+                <td>
+                    <p th:text="${user.messageCount}">
+                </td>
+                <td>
+                    <p th:text="${user.commentCount}"/>
                 </td>
                 <td>
                     <th:block th:switch="${user.isStopped}">

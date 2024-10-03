@@ -3,10 +3,13 @@ package com.example.ToYokoNa.service;
 import com.example.ToYokoNa.controller.form.CommentForm;
 import com.example.ToYokoNa.controller.form.UserCommentForm;
 import com.example.ToYokoNa.controller.form.UserForm;
+import com.example.ToYokoNa.repository.BranchRepository;
 import com.example.ToYokoNa.repository.CommentRepository;
+import com.example.ToYokoNa.repository.UserRepository;
 import com.example.ToYokoNa.repository.entity.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +18,24 @@ import java.util.List;
 public class CommentService {
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    BranchRepository branchRepository;
+
+    @Transactional
     public void saveComment(UserForm loginUser, CommentForm commentForm) {
         commentForm.setUserId(loginUser.getId());
         Comment comment = setComment(commentForm);
         commentRepository.save(comment);
+        userRepository.countUpComment(loginUser.getId());
+        branchRepository.countUpComment(loginUser.getBranchId());
     }
 
     private Comment setComment(CommentForm commentForm) {
@@ -59,7 +74,11 @@ public class CommentService {
     /*
     コメントの削除処理
      */
-    public void deleteComment(int id) {
+    @Transactional
+    public void deleteComment(int id, int userId) {
         commentRepository.deleteById(id);
+        userRepository.countDownComment(userId);
+        branchRepository.countDownComment(userService.findUser(userId).getBranchId());
+
     }
 }

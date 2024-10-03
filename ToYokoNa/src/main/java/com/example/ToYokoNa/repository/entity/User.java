@@ -44,6 +44,12 @@ public class User {
     @Column(name="login_time", nullable = true)
     private Date loginTime;
 
+    @Column(name = "message_count")
+    private int messageCount;
+
+    @Column(name = "comment_count")
+    private int commentCount;
+
     @OneToMany(mappedBy = "user")
     private List<Message> message;
   

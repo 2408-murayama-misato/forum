@@ -118,15 +118,15 @@ public class MessageController {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         if (loginUser.getId() == messageUserId) {
-            messageService.deleteMessage(id);
+            messageService.deleteMessage(id,messageUserId,messageBranch);
             mav.setViewName("redirect:/");
             return mav;
         } else if (loginUser.getDepartmentId() == 2) {
-                messageService.deleteMessage(id);
+                messageService.deleteMessage(id, messageUserId, messageBranch);
                 mav.setViewName("redirect:/");
                 return mav;
         } else if (loginUser.getBranchId() == messageBranch && loginUser.getDepartmentId() == 3 && messageDepartment == 4) {
-            messageService.deleteMessage(id);
+            messageService.deleteMessage(id, messageUserId,messageBranch);
             mav.setViewName("redirect:/");
             return mav;
         } else {

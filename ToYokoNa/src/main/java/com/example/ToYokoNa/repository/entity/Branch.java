@@ -26,6 +26,12 @@ public class Branch {
     @Column(name="updated_date", insertable = false)
     private Date updatedDate;
 
+    @Column(name = "message_count")
+    private int messageCount;
+
+    @Column(name = "comment_count")
+    private int commentCount;
+
     @OneToMany(mappedBy = "branch")
     private List<User> user;
 }

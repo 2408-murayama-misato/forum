@@ -66,6 +66,20 @@ input[type="button"] {
 .users th, .users td {
     text-align: center;
 }
+
+.branches {
+    width: 1000px;
+    margin: auto;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+.branches th {
+    padding: 10px;
+    border-bottom: 2px solid #e0f9ff;
+}
+.branches th, .branches td {
+    text-align: center;
+}
 .edit-user {
     background: lightblue;
     border-radius: 3px;

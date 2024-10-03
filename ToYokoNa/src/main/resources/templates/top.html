@@ -99,6 +99,8 @@
                     <div class="comment-delete">
                         <div th:if="${comment.userId == loginUser.id}">
                             <form th:method="delete" th:action="@{/deleteComment/{id}(id=${comment.id})}">
+                                <input type="hidden" name="commentBranch" id="commentBranch" th:value="${comment.Id}"/>
+                                <input type="hidden" name="commentUserId" id="commentUserId" th:value="${comment.userId}">
                                 <input type="submit" name="delete-button" value="コメント削除">
                             </form>
                         </div>
