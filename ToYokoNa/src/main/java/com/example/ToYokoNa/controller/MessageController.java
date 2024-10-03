@@ -3,6 +3,7 @@ package com.example.ToYokoNa.controller;
 import com.example.ToYokoNa.controller.form.*;
 import com.example.ToYokoNa.service.CommentService;
 import com.example.ToYokoNa.service.MessageService;
+import com.example.ToYokoNa.service.ReadService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ public class MessageController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    ReadService readService;
     /*
     Top画面表示処理
      */
@@ -44,6 +47,7 @@ public class MessageController {
         List<UserMessageForm> messages = messageService.findALLMessages(startDate, endDate, category);
         List<UserCommentForm> comments = commentService.findAllComments();
         CommentForm commentForm = new CommentForm();
+        List<Integer> readMessages = readService.findReadMessages(loginUser.getId());
 //　　　ユーザー管理画面表示フラグ
         boolean isShowUserManage = false;
         if (loginUser.getDepartmentId() == 1) {
@@ -60,6 +64,7 @@ public class MessageController {
         mav.addObject("category", category);
         mav.addObject("messageId", model.getAttribute("messageId"));
         mav.addObject("commentErrorMessages", model.getAttribute("commentErrorMessages"));
+        mav.addObject("read", readMessages);
         mav.addObject("deleteErrorMessage", session.getAttribute("deleteErrorMessage"));
         mav.addObject("deleteErrorMessageId", session.getAttribute("messageId"));
         mav.setViewName("/top");
