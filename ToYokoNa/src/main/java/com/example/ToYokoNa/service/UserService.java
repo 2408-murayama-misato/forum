@@ -6,6 +6,7 @@ import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,9 @@ public class UserService {
             throw new Exception("ログインに失敗しました");
         }
         UserForm user = setUserForm(result);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String loginDate = sdf.format(new Date());
+        user.setLoginTime(loginDate);
         return user;
     }
 
@@ -39,7 +43,6 @@ public class UserService {
         user.setBranchId(result.getBranchId());
         user.setDepartmentId(result.getDepartmentId());
         user.setIsStopped(result.getIsStopped());
-        user.setLoginTime(new Date());
         return user;
     }
     /*

@@ -82,5 +82,5 @@ public class UserForm {
     private Integer isStopped;
     private Date createdDate;
     private Date updatedDate;
-    private Date loginTime;
+    private String loginTime;
 }
