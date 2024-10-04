@@ -32,7 +32,12 @@
       </div>
         <a th:href="@{/newMessage}">
             <input type="button" value="新規投稿">
-        </a><br>
+        </a>
+      <div th:if="${loginUser.branchId == 1}">
+          <a th:href="@{/count}">
+            <input type="button" value="投稿数">
+          </a>
+      </div><br>
         <div class="search">
             <form action="./">
                 <input type="date" name="startDate" th:value="${startDate}">~<input type="date" name="endDate" th:value="${endDate}">
