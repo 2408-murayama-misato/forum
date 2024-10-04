@@ -37,6 +37,11 @@
           <a th:href="@{/count}">
             <input type="button" value="投稿数">
           </a>
+      </div>
+      <div th:if="${loginUser.branchId == 1 && loginUser.departmentId == 2}">
+          <a th:href="@{/ngWord}">
+              <input type="button" value="NGワード設定">
+          </a>
       </div><br>
         <div class="search">
             <form action="./">
