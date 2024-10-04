@@ -249,4 +249,16 @@ public class UserController {
         mav.addObject("userForm", userForm);
         return mav;
     }
+//    投稿数ページ遷移
+    @GetMapping("/count")
+    public ModelAndView count() {
+        ModelAndView mav = new ModelAndView();
+        List<UserForm> users = userService.findAllUser();
+        List<BranchForm> branchForms = branchService.findAllBranches();
+        mav.setViewName("/count");
+        mav.addObject("users", users);
+        mav.addObject("branchForms", branchForms);
+        return mav;
+    }
+
 }
