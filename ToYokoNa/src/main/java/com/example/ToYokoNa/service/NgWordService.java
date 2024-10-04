@@ -13,10 +13,8 @@ import java.util.List;
 public class NgWordService {
     @Autowired
     NgWordRepository ngWordRepository;
-    public void saveNgWord(String text) {
-
-        NgWord ngWord = new NgWord();
-        ngWord.setNgWord(text);
+    public void saveNgWord(NgWordForm ngWordForm) {
+        NgWord ngWord = setNgWord(ngWordForm);
         ngWordRepository.save(ngWord);
     }
 
@@ -35,5 +33,16 @@ public class NgWordService {
             ngWordForms.add(ngWordForm);
         }
         return ngWordForms;
+    }
+
+    private NgWord setNgWord(NgWordForm ngWordForm) {
+        NgWord ngWord = new NgWord();
+        ngWord.setId(ngWordForm.getId());
+        ngWord.setNgWord(ngWordForm.getNgWord());
+        return ngWord;
+    }
+
+    public void deleteNgWord(int id) {
+        ngWordRepository.deleteById(id);
     }
 }

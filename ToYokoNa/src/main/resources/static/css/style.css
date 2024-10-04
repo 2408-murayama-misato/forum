@@ -87,12 +87,33 @@ input[type="button"] {
     padding: 10px;
     border-bottom: 2px solid #e0f9ff;
 }
+.branches tr {
+    margin-bottom: 20px;
+}
 .branches th, .branches td {
     text-align: center;
 }
 .edit-user {
     background: lightblue;
     border-radius: 3px;
+}
+
+.ng-words-list {
+    width: 1000px;
+    margin: auto;
+    background-color: #fff;
+}
+.ng-words-list th {
+    padding: 10px;
+    border-bottom: 2px solid #e0f9ff;
+}
+.ng-words-list th, .users td {
+    text-align: left;
+}
+
+.ng-word-form {
+    text-align: center;
+    margin-bottom: 20px;
 }
 .off {
     background: lightpink;

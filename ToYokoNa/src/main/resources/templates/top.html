@@ -20,16 +20,14 @@
             最終ログイン：<span th:text="${loginUser.loginTime}" />
         </div>
         <!--ユーザー管理画面表示フラグ-->
-      <div th:if="${isShowUserManage}">
+        <div th:if="${isShowUserManage}">
             <a th:href="@{/userManage}">
                 <input type="button" value="ユーザー管理画面">
             </a>
-      </div>
-      <div class="logout">
-          <a th:href="@{/logout}">
-              <input type="button" value="ログアウト">
-          </a>
-      </div>
+        </div>
+        <a th:href="@{/logout}">
+            <input type="button" value="ログアウト">
+        </a>
         <a th:href="@{/newMessage}">
             <input type="button" value="新規投稿">
         </a>
@@ -81,20 +79,21 @@
                         <input type="submit" name="delete-button" value="投稿削除"/>
                     </form>
                 </div><br />
-                <div class="read-button">
-                    <!-- 既読だったら -->
-                    <th:block th:if="${read.contains(message.id) == true}">
-                        <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
-                            <input type="submit" value="未読にする" class="toUnread">
-                        </form>
-                    </th:block>
-                    <th:block th:if="${read.contains(message.id) == false}">
-                        <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
-                            <input type="submit" value="既読にする" class="toRead">
-                        </form>
-                    </th:block>
-                </div><br>
             </div><br>
+            <div class="read-button">
+                <!-- 既読だったら -->
+                <th:block th:if="${read.contains(message.id) == true}">
+                    <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
+                        <input type="submit" value="未読にする" class="toUnread">
+                    </form>
+                </th:block>
+                <th:block th:if="${read.contains(message.id) == false}">
+                    <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
+                        <input type="submit" value="既読にする" class="toRead">
+                    </form>
+                </th:block>
+            </div>
+            <br />
             <div class="comment" th:each="comment : ${comments}">
                 <div th:if="${comment.messageId == message.id}">
                     <div class="content">

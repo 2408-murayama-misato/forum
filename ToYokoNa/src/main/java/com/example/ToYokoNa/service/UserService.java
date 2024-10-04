@@ -32,7 +32,7 @@ public class UserService {
             throw new Exception("ログインに失敗しました");
         }
         UserForm user = setUserForm(result);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String loginDate = sdf.format(new Date());
         user.setLoginTime(loginDate);
         return user;
