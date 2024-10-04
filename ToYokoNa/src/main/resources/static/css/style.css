@@ -53,6 +53,16 @@ input[type="button"] {
     bottom: 30px;
 }
 
+.read-button {
+    float: right;
+}
+
+.toRead {
+    background: lightgreen;
+}
+.toUnread {
+    background: lightcoral;
+}
 /*userManage画面*/
 .users {
     width: 1000px;
