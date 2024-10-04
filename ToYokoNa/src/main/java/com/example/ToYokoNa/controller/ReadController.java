@@ -38,7 +38,6 @@ public class ReadController {
         }
         // 画面に未読か既読のボタンを表示させるために自分の既読している投稿の情報を取得
         List<Integer> readMessages = readService.findReadMessages(loginUser.getId());
-        mav.addObject("read", readMessages);
         mav.setViewName("redirect:/");
         return mav;
     }
