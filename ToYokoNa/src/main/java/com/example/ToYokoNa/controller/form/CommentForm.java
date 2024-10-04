@@ -1,6 +1,7 @@
 package com.example.ToYokoNa.controller.form;
 
 import com.example.ToYokoNa.Validation.CheckBlank;
+import com.example.ToYokoNa.Validation.NgWord;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.Date;
 public class CommentForm {
     private int id;
 
+    @NgWord(message = "コメント内容にNGワードが含まれています")
     @CheckBlank(message = "メッセージを入力してください")
     @Size(max = 500, message = "500文字以内で入力してください")
     private String text;

@@ -137,8 +137,4 @@ public class MessageController {
             return mav;
         }
     }
-
-//    NGワード設定画面遷移
-    @GetMapping("/ngWord")
-    
 }

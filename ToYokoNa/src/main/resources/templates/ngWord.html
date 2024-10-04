@@ -6,9 +6,21 @@
     <title>投稿数</title>
   </head>
   <body>
+    <h2>NGワード設定</h2>
     <form th:action="@{/add/ngWord}">
-      <input type="text" th:field="ngWord">
+      <input type="text" name="ngWord" id="ngWord">
       <input type="submit" value="登録">
     </form>
+    <table class="ng-words-list" >
+      <tr>
+        <th>登録済みNGワード</th>
+      </tr>
+      <tr>
+        <div th:each="ngWord :${}"
+        <td>
+
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
