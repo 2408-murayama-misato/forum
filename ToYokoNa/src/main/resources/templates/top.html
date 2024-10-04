@@ -80,7 +80,20 @@
                         <input type="hidden" name="messageDepartment" id="messageDepartment" th:value="${message.departmentId}">
                         <input type="submit" name="delete-button" value="投稿削除"/>
                     </form>
-                </div>
+                </div><br />
+                <div class="read-button">
+                    <!-- 既読だったら -->
+                    <th:block th:if="${read.contains(message.id) == true}">
+                        <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
+                            <input type="submit" value="未読にする" class="toUnread">
+                        </form>
+                    </th:block>
+                    <th:block th:if="${read.contains(message.id) == false}">
+                        <form th:method="post" th:action="@{/read/{id}(id=${message.id})}">
+                            <input type="submit" value="既読にする" class="toRead">
+                        </form>
+                    </th:block>
+                </div><br>
             </div><br>
             <div class="comment" th:each="comment : ${comments}">
                 <div th:if="${comment.messageId == message.id}">
