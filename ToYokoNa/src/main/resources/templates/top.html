@@ -93,6 +93,13 @@
                     </form>
                 </th:block>
             </div>
+            <div class="read-user">
+                既読ユーザ：
+                <th:block th:if="${readUser != null}">
+                    <div class="readUsers" th:each="readUsers : ${readUser}"></div>
+                    <li th:text="${readUsers}">
+                </th:block>
+            </div>
             <br />
             <div class="comment" th:each="comment : ${comments}">
                 <div th:if="${comment.messageId == message.id}">
