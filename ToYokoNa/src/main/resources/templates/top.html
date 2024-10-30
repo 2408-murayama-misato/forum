@@ -135,6 +135,19 @@
                     <input type="submit" value="投稿"/>
                 </form>
             </div><br>
+            <div>
+                <span th:if="${messagePage.hasPrevious()}">
+                    <a th:href="@{/(page=${currentPage - 1}, size=${pageSize})}">前へ</a>
+                </span>
+                <span th:each="i : ${#numbers.sequence(0, messagePage.totalPages - 1)}">
+                    <a th:href="@{/(page=${i}, size=${pageSize})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == currentPage} ? 'active' : ''">1</a>
+                </span>
+                <span th:if="${itemPage.hasNext()}">
+                    <a th:href="@{/(page=${currentPage + 1}, size=${pageSize})}">次へ</a>
+                </span>
+            </div>
         </div>
         <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/js/main.js}"></script>

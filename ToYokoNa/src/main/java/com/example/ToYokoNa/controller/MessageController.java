@@ -6,6 +6,10 @@ import com.example.ToYokoNa.service.MessageService;
 import com.example.ToYokoNa.service.ReadService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MessageController {
@@ -40,11 +46,17 @@ public class MessageController {
     public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
                             @RequestParam(name = "endDate", required = false) String endDate,
                             @RequestParam(name = "category", required = false) String category,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "2") int size,
                             Model model)
                             throws ParseException {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm)session.getAttribute("loginUser");
-        List<UserMessageForm> messages = messageService.findALLMessages(startDate, endDate, category);
+
+        // ページネーション設定含めトップに表示する投稿取得
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserMessageForm> messages = messageService.findALLMessages(startDate, endDate, category, pageable);
+        Page<UserMessageForm> messagePage = messageService.findALLMessages(startDate, endDate, category, pageable);
         List<UserCommentForm> comments = commentService.findAllComments();
         CommentForm commentForm = new CommentForm();
         List<Integer> readMessages = readService.findReadMessages(loginUser.getId());
@@ -67,6 +79,9 @@ public class MessageController {
         mav.addObject("read", readMessages);
         mav.addObject("deleteErrorMessage", session.getAttribute("deleteErrorMessage"));
         mav.addObject("deleteErrorMessageId", session.getAttribute("messageId"));
+        mav.addObject("messagePage", messagePage);
+        mav.addObject("currentPage", page);
+        mav.addObject("pageSize", size);
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");

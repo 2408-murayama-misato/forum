@@ -9,8 +9,8 @@ import com.example.ToYokoNa.repository.MessageRepository;
 import com.example.ToYokoNa.repository.UserRepository;
 import com.example.ToYokoNa.repository.entity.Comment;
 import com.example.ToYokoNa.repository.entity.Message;
-import com.example.ToYokoNa.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,12 +42,9 @@ public class MessageService {
     /*
     全投稿取得処理
      */
-    public List<UserMessageForm> findALLMessages(String startDate, String endDate, String category) throws ParseException {
-//       取得件数定数
-        int limit = 1000;
+    public Page<UserMessageForm> findALLMessages(String startDate, String endDate, String category, Pageable pageable) throws ParseException {
 //        絞込日付作成処理
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<Message> results = new ArrayList<>();
         if (isBlank(startDate)) {
             startDate = "2022-01-01 00:00:00";
         } else {
@@ -63,14 +60,15 @@ public class MessageService {
 
         if (isBlank(category)) {
 //            カテゴリー情報なし投稿取得処理
-             results = messageRepository.findAllByOrderByCreateDateDesc(limit, start, end);
+            Page<Message> results = messageRepository.findAllByOrderByCreateDateDesc(start, end, pageable);
+            return results.map(message -> new UserMessageForm(message.getId(), message.getText()))
         } else {
 //            カテゴリー情報あり投稿取得処理
-            results = messageRepository.findAllByWHERECategoryOrderByCreateDateDesc(limit, start, end, category);
+            Page<Message> results = messageRepository.findAllByWHERECategoryOrderByCreateDateDesc(start, end, category, pageable);
+            List<UserMessageForm> userMessagesForm = setUserMessageForm(results);
+            Page<UserMessageForm> messages = new PageImpl<>(userMessagesForm, pageable, userMessagesForm.size());
+            return messages;
         }
-
-        List<UserMessageForm> messages = setUserMessageForm(results);
-        return messages;
     }
 
     private List<UserMessageForm> setUserMessageForm(List<Message> results) {
