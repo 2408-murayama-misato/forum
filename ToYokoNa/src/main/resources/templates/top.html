@@ -79,11 +79,8 @@
                 <th:block th:if="${message.hours <= 24 && message.minutes >= 60}">
                     <span th:text="${message.hours} + '時間前'" />
                 </th:block>
-                <th:block th:if="${message.days <= 30 && message.hours >= 24}">
-                    <span th:text="${message.days} + '日前'" />
-                </th:block>
-                <th:block th:if="${message.months <= 30 && message.days >= 31}">
-                    <span th:text="${message.months} + 'か月前'" />
+                <th:block th:if="${message.daysOrMonths != null && message.hours >= 24}">
+                    <span th:text="${message.daysOrMonths}" />
                 </th:block>
             </div>
                 <div th:if="${message.userId == loginUser.id || loginUser.departmentId == 2 ||

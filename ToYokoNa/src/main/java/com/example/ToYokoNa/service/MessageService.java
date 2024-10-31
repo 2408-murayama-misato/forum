@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
@@ -92,13 +89,20 @@ public class MessageService {
             userMessageForm.setCategory(message.getCategory());
             userMessageForm.setDepartmentId(message.getUser().getDepartmentId());
             userMessageForm.setBranchId(message.getUser().getBranchId());
+            // DateからLocalDateTimeに変換する場合Date→Instant→LocalDateTimeという流れになる
             Instant instant = message.getUpdatedDate().toInstant();
             LocalDateTime t1 = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            // QA表URL参考
             userMessageForm.setSeconds(ChronoUnit.SECONDS.between(t1, now));
             userMessageForm.setMinutes(ChronoUnit.MINUTES.between(t1, now));
             userMessageForm.setHours(ChronoUnit.HOURS.between(t1, now));
-            userMessageForm.setDays(ChronoUnit.DAYS.between(t1, now));
-            userMessageForm.setMonths(ChronoUnit.MONTHS.between(t1, now));
+            // 正確な日付の計算はPeriodクラスを使用する
+            Period period = Period.between(t1.toLocalDate(), now.toLocalDate());
+            if (period.getMonths() >= 1 || period.getYears() >= 1) { // 1か月以上経過している場合(年越しまたいでる場合も考慮)
+                userMessageForm.setDaysOrMonths(period.getMonths() + (period.getYears() * 12) + "か月前");
+            } else { // １か月未満の場合
+                userMessageForm.setDaysOrMonths(ChronoUnit.DAYS.between(t1, now) + "日前");
+            }
             userMessageForms.add(userMessageForm);
         }
         // PageImpl<>は引数に

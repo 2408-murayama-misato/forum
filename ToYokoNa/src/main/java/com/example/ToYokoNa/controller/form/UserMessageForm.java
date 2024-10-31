@@ -3,6 +3,7 @@ package com.example.ToYokoNa.controller.form;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 @Getter
@@ -33,8 +34,6 @@ public class UserMessageForm {
 
     private long hours;
 
-    private long days;
-
-    private long months;
+    private String daysOrMonths;
 
 }
