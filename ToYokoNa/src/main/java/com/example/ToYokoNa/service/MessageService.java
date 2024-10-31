@@ -61,19 +61,19 @@ public class MessageService {
         if (isBlank(category)) {
 //            カテゴリー情報なし投稿取得処理
             Page<Message> results = messageRepository.findAllByOrderByCreateDateDesc(start, end, pageable);
-            return results.map(message -> new UserMessageForm(message.getId(), message.getText()))
+            Page<UserMessageForm> messages = setUserMessageForm(results, pageable);
+            return messages;
         } else {
 //            カテゴリー情報あり投稿取得処理
             Page<Message> results = messageRepository.findAllByWHERECategoryOrderByCreateDateDesc(start, end, category, pageable);
-            List<UserMessageForm> userMessagesForm = setUserMessageForm(results);
-            Page<UserMessageForm> messages = new PageImpl<>(userMessagesForm, pageable, userMessagesForm.size());
+            Page<UserMessageForm> messages = setUserMessageForm(results, pageable);
             return messages;
         }
     }
 
-    private List<UserMessageForm> setUserMessageForm(List<Message> results) {
-        List<UserMessageForm> messages = new ArrayList<>();
-        for (Message message : results) {
+    private Page<UserMessageForm> setUserMessageForm(Page<Message> results, Pageable pageable) {
+        List<UserMessageForm> userMessageForms = new ArrayList<>();
+        for (Message message : results.getContent()) {
             UserMessageForm userMessageForm = new UserMessageForm();
             userMessageForm.setId(message.getId());
             userMessageForm.setText(message.getText());
@@ -84,9 +84,12 @@ public class MessageService {
             userMessageForm.setCategory(message.getCategory());
             userMessageForm.setDepartmentId(message.getUser().getDepartmentId());
             userMessageForm.setBranchId(message.getUser().getBranchId());
-            messages.add(userMessageForm);
+            userMessageForms.add(userMessageForm);
         }
-        return messages;
+        // PageImpl<>は引数に
+        // (ページのコンテンツ, ページング情報, 利用可能なアイテムの合計数(long型なのでPage型.getTotalElements()を使う))を設定する。
+        // ただのリスト型にページング情報を足してPage<T>として扱うためのクラス。
+        return new PageImpl<>(userMessageForms, pageable, results.getTotalElements());
     }
     /*
     投稿追加処理

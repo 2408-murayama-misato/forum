@@ -46,17 +46,14 @@ public class MessageController {
     public ModelAndView top(@RequestParam(name = "startDate", required = false) String startDate,
                             @RequestParam(name = "endDate", required = false) String endDate,
                             @RequestParam(name = "category", required = false) String category,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "2") int size,
+                            Pageable pageable,
                             Model model)
                             throws ParseException {
         ModelAndView mav = new ModelAndView();
         UserForm loginUser = (UserForm)session.getAttribute("loginUser");
 
-        // ページネーション設定含めトップに表示する投稿取得
-        Pageable pageable = PageRequest.of(page, size);
-        Page<UserMessageForm> messages = messageService.findALLMessages(startDate, endDate, category, pageable);
-        Page<UserMessageForm> messagePage = messageService.findALLMessages(startDate, endDate, category, pageable);
+        Page<UserMessageForm> pageList = messageService.findALLMessages(startDate, endDate, category, pageable);
+        List<UserMessageForm> messages = pageList.getContent();
         List<UserCommentForm> comments = commentService.findAllComments();
         CommentForm commentForm = new CommentForm();
         List<Integer> readMessages = readService.findReadMessages(loginUser.getId());
@@ -68,6 +65,7 @@ public class MessageController {
         mav.addObject("commentForm", commentForm);
         mav.addObject("comments", comments);
         mav.addObject("messages", messages);
+        mav.addObject("pages", pageList);
         mav.addObject("errorMessages", session.getAttribute("errorMessages"));
         mav.addObject("loginUser", loginUser);
         mav.addObject("isShowUserManage", isShowUserManage);
@@ -79,9 +77,6 @@ public class MessageController {
         mav.addObject("read", readMessages);
         mav.addObject("deleteErrorMessage", session.getAttribute("deleteErrorMessage"));
         mav.addObject("deleteErrorMessageId", session.getAttribute("messageId"));
-        mav.addObject("messagePage", messagePage);
-        mav.addObject("currentPage", page);
-        mav.addObject("pageSize", size);
         mav.setViewName("/top");
         // 管理者フィルターのエラーメッセージをsessionで渡しているので最後に削除してtopページ表示
         session.removeAttribute("errorMessages");
