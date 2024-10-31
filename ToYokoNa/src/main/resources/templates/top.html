@@ -69,6 +69,23 @@
             <div class="created-date">
                 投稿日時:<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd HH:mm')}"/>
             </div>
+            <div class="duration">
+                <th:block th:if="${message.seconds <= 59}">
+                    <span th:text="${message.seconds} + '秒前'" />
+                </th:block>
+                <th:block th:if="${message.minutes <= 59 && message.seconds >= 60}">
+                    <span th:text="${message.minutes} + '分前'" />
+                </th:block>
+                <th:block th:if="${message.hours <= 24 && message.minutes >= 60}">
+                    <span th:text="${message.hours} + '時間前'" />
+                </th:block>
+                <th:block th:if="${message.days <= 30 && message.hours >= 24}">
+                    <span th:text="${message.days} + '日前'" />
+                </th:block>
+                <th:block th:if="${message.months <= 30 && message.days >= 31}">
+                    <span th:text="${message.months} + 'か月前'" />
+                </th:block>
+            </div>
                 <div th:if="${message.userId == loginUser.id || loginUser.departmentId == 2 ||
                 (loginUser.branchId == message.branchId && loginUser.departmentId == 3 && message.departmentId == 4)}">
                 <div class="message-delete">

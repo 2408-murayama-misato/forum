@@ -16,6 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,20 +64,22 @@ public class MessageService {
         Date start = sdf.parse(startDate);
         Date end = sdf.parse(endDate);
 
+        // 投稿からの差分計算のため現在時刻を渡す
+        LocalDateTime now = LocalDateTime.now();
         if (isBlank(category)) {
 //            カテゴリー情報なし投稿取得処理
             Page<Message> results = messageRepository.findAllByOrderByCreateDateDesc(start, end, pageable);
-            Page<UserMessageForm> messages = setUserMessageForm(results, pageable);
+            Page<UserMessageForm> messages = setUserMessageForm(results, pageable, now);
             return messages;
         } else {
 //            カテゴリー情報あり投稿取得処理
             Page<Message> results = messageRepository.findAllByWHERECategoryOrderByCreateDateDesc(start, end, category, pageable);
-            Page<UserMessageForm> messages = setUserMessageForm(results, pageable);
+            Page<UserMessageForm> messages = setUserMessageForm(results, pageable, now);
             return messages;
         }
     }
 
-    private Page<UserMessageForm> setUserMessageForm(Page<Message> results, Pageable pageable) {
+    private Page<UserMessageForm> setUserMessageForm(Page<Message> results, Pageable pageable, LocalDateTime now) {
         List<UserMessageForm> userMessageForms = new ArrayList<>();
         for (Message message : results.getContent()) {
             UserMessageForm userMessageForm = new UserMessageForm();
@@ -84,6 +92,13 @@ public class MessageService {
             userMessageForm.setCategory(message.getCategory());
             userMessageForm.setDepartmentId(message.getUser().getDepartmentId());
             userMessageForm.setBranchId(message.getUser().getBranchId());
+            Instant instant = message.getUpdatedDate().toInstant();
+            LocalDateTime t1 = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            userMessageForm.setSeconds(ChronoUnit.SECONDS.between(t1, now));
+            userMessageForm.setMinutes(ChronoUnit.MINUTES.between(t1, now));
+            userMessageForm.setHours(ChronoUnit.HOURS.between(t1, now));
+            userMessageForm.setDays(ChronoUnit.DAYS.between(t1, now));
+            userMessageForm.setMonths(ChronoUnit.MONTHS.between(t1, now));
             userMessageForms.add(userMessageForm);
         }
         // PageImpl<>は引数に
