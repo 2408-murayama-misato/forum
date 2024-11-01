@@ -87,6 +87,7 @@ public class MessageService {
             userMessageForm.setUserId(message.getUserId());
             userMessageForm.setUserName(message.getUser().getName());
             userMessageForm.setCreatedDate(message.getCreatedDate());
+            userMessageForm.setUpdatedDate(message.getUpdatedDate());
             userMessageForm.setCategory(message.getCategory());
             userMessageForm.setDepartmentId(message.getUser().getDepartmentId());
             userMessageForm.setBranchId(message.getUser().getBranchId());
@@ -100,10 +101,11 @@ public class MessageService {
             // 正確な日付の計算はPeriodクラスを使用する
             Period period = Period.between(t1.toLocalDate(), now.toLocalDate());
             if (period.getMonths() >= 1 || period.getYears() >= 1) { // 1か月以上経過している場合(年越しまたいでる場合も考慮)
-                userMessageForm.setDaysOrMonths(period.getMonths() + (period.getYears() * 12) + "か月前");
+                userMessageForm.setMonths(period.getMonths() + (period.getYears() * 12));
             } else { // １か月未満の場合
-                userMessageForm.setDaysOrMonths(ChronoUnit.DAYS.between(t1, now) + "日前");
+                userMessageForm.setDays(ChronoUnit.DAYS.between(t1, now));
             }
+            userMessageForm.setYears(period.getYears());
             userMessageForms.add(userMessageForm);
         }
         // PageImpl<>は引数に

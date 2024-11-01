@@ -22,6 +22,8 @@ public class UserMessageForm {
 
     private Date createdDate;
 
+    private Date updatedDate;
+
     private String userName;
 
     private Integer departmentId;
@@ -34,6 +36,10 @@ public class UserMessageForm {
 
     private long hours;
 
-    private String daysOrMonths;
+    private long days;
+
+    private long months;
+
+    private long years;
 
 }

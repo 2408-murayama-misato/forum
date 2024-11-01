@@ -67,7 +67,10 @@
                 本文:<pre><span th:text="${message.text}"/></pre>
             </div>
             <div class="created-date">
-                投稿日時:<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd HH:mm')}"/>
+                投稿日時：<span th:text="${#dates.format(message.createdDate, 'yyyy/MM/dd HH:mm')}" />
+            </div>
+            <div class="updated-date">
+                最終編集日時:<span th:text="${#dates.format(message.updatedDate, 'yyyy/MM/dd HH:mm')}" />
             </div>
             <div class="duration">
                 <th:block th:if="${message.seconds <= 59}">
@@ -79,8 +82,14 @@
                 <th:block th:if="${message.hours <= 24 && message.minutes >= 60}">
                     <span th:text="${message.hours} + '時間前'" />
                 </th:block>
-                <th:block th:if="${message.daysOrMonths != null && message.hours >= 24}">
-                    <span th:text="${message.daysOrMonths}" />
+                <th:block th:if="${message.days != 0 && message.hours >= 24}">
+                    <span th:text="${message.days} + '日前'" />
+                </th:block>
+                <th:block th:if="${message.months != 0 && message.hours >= 24 && message.years == 0}">
+                    <span th:text="${message.months} + 'か月前'" />
+                </th:block>
+                <th:block th:if="${message.years > 0 && message.months >= 12}">
+                    <span th:text="${message.years} + '年前'" />
                 </th:block>
             </div>
                 <div th:if="${message.userId == loginUser.id || loginUser.departmentId == 2 ||
