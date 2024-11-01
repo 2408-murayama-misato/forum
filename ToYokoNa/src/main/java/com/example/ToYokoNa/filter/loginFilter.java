@@ -18,6 +18,9 @@ public class loginFilter implements Filter {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    LoginSession loginSession;
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain ) throws IOException, ServletException {
@@ -25,19 +28,17 @@ public class loginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         session = httpRequest.getSession();
         if (session != null && session.getAttribute("loginUser") != null) {
-            chain.doFilter(httpRequest, httpResponse);
+            if (!loginSession.alreadyLogin(String.valueOf(request))) {
+                chain.doFilter(httpRequest, httpResponse);
+            } else {
+                String errorMessage = "既に他の端末でログインしています。";
+                session.setAttribute("errorMessage", errorMessage);
+                httpResponse.sendRedirect("/ToYokoNa/userLogin");
+            }
         } else {
             String errorMessage = "ログインしてください";
             session.setAttribute("errorMessage", errorMessage);
             httpResponse.sendRedirect("/ToYokoNa/userLogin");
         }
-    }
-
-    @Override
-    public void init(FilterConfig config) {
-    }
-
-    @Override
-    public void destroy() {
     }
 }
