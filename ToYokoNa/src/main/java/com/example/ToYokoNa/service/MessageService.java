@@ -48,13 +48,14 @@ public class MessageService {
     public Page<UserMessageForm> findALLMessages(String startDate, String endDate, String category, Pageable pageable) throws ParseException {
 //        絞込日付作成処理
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat noTime = new SimpleDateFormat("yyyy-MM-dd");
         if (isBlank(startDate)) {
             startDate = "2022-01-01 00:00:00";
         } else {
             startDate = startDate + " 00:00:00";
         }
         if (isBlank(endDate)) {
-            endDate = sdf.format(new Date());
+            endDate = noTime.format(new Date()) + " 23:59:59";
         } else {
             endDate = endDate + " 23:59:59";
         }

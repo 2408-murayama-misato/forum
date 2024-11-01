@@ -73,6 +73,7 @@ public class MessageController {
         mav.addObject("startDate", startDate);
         mav.addObject("endDate", endDate);
         mav.addObject("category", category);
+        mav.addObject("page", pageable);
         mav.addObject("messageId", model.getAttribute("messageId"));
         mav.addObject("commentErrorMessages", model.getAttribute("commentErrorMessages"));
         mav.addObject("read", readMessages);
