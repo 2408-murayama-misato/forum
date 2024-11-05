@@ -3,11 +3,13 @@ package com.example.ToYokoNa.controller;
 import com.example.ToYokoNa.controller.form.BranchForm;
 import com.example.ToYokoNa.controller.form.DepartmentForm;
 import com.example.ToYokoNa.controller.form.UserForm;
+import com.example.ToYokoNa.filter.SessionManager;
 import com.example.ToYokoNa.service.BranchService;
 import com.example.ToYokoNa.service.DepartmentService;
 import com.example.ToYokoNa.service.UserService;
 import com.example.ToYokoNa.utils.CipherUtil;
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -49,8 +51,10 @@ public class UserController {
      */
     @PostMapping("/userLogin")
     public ModelAndView login(@ModelAttribute("userForm") @Validated({ UserForm.UserLogin.class }) UserForm userForm,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult, HttpSession session) throws Exception {
         ModelAndView mav = new ModelAndView();
+        String existedSessionId = SessionManager.getSessionId(userForm.getAccount());
+
         if (bindingResult.hasErrors()) {
             return new ModelAndView("/userLogin");
         }
@@ -61,6 +65,11 @@ public class UserController {
         // try文の中と処理後にもuserDataオブジェクトを使用できるように先に作成
         UserForm userData;
         try {
+            // 既にログインしているか確認
+            if (existedSessionId != null && !existedSessionId.equals(session.getId())) {
+                // 例外を投げてcatchで処理をする
+                throw new Exception("このアカウントは他の場所からログインされています");
+            }
             userData = userService.selectUser(userForm);
             // もしユーザが停止している場合,もしくはユーザ情報が存在しない場合
             if (userData.getIsStopped() == 1) {
@@ -75,6 +84,8 @@ public class UserController {
         }
         // セッションに値をセット
         session.setAttribute("loginUser", userData);
+        // 新しいセッションIDを記録する
+        SessionManager.addSession(userForm.getAccount(), session.getId());
         // topにリダイレクト
         mav.setViewName("redirect:/");
         return mav;
@@ -243,9 +254,10 @@ public class UserController {
     @GetMapping("/logout")
     public ModelAndView logout () {
         session.removeAttribute("loginUser");
+        session.invalidate();
         ModelAndView mav = new ModelAndView();
         UserForm userForm = new UserForm();
-        mav.setViewName("/userLogin");
+        mav.setViewName("redirect:/userLogin");
         mav.addObject("userForm", userForm);
         return mav;
     }
