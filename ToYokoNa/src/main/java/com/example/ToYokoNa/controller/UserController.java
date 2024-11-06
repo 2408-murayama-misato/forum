@@ -68,7 +68,7 @@ public class UserController {
             // 既にログインしているか確認
             if (existedSessionId != null && !existedSessionId.equals(session.getId())) {
                 // 例外を投げてcatchで処理をする
-                throw new Exception("このアカウントは他の場所からログインされています");
+                throw new Exception("このユーザは他の場所からログインされています");
             }
             userData = userService.selectUser(userForm);
             // もしユーザが停止している場合,もしくはユーザ情報が存在しない場合

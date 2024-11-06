@@ -15,7 +15,7 @@
         <li th:text="${errorMessage}"/><br>
       </div>
     </div>
-      <form class="add-message" th:action="@{/addMessage}" method="post" th:object="${messageForm}">
+      <form class="add-message" th:action="@{/addMessage}" th:method="post" th:object="${messageForm}">
         <div class="new-title">件名<br>
           <input type="text"  th:field="*{title}" rows="5" cols="30"></input>
         </div><br>
